@@ -195,3 +195,5 @@ All unit and integration tests run in under 2 seconds and report clean results.
 - **Course Code:** BCSP508 - CSE Final Year College Project
 - **Regulation References:** *E-Waste (Management) Rules, 2022* (MoEFCC / CPCB)
 
+#   e - w a s t e m a n a g e m e n t  
+ 
