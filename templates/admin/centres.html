@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% block title %}Manage Recycling Centres - Admin Portal{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <div>
+      <h3 class="fw-bold mb-1">Manage Authorized Recycling Centres</h3>
+      <p class="text-muted small mb-0">Maintain statutory CPCB & KSPCB e-waste recyclers directory and verification
+        audits.</p>
+    </div>
+    <div class="d-flex gap-2">
+      <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-secondary">
+        <i class="fa-solid fa-arrow-left me-1"></i> Dashboard
+      </a>
+      <a href="{{ url_for('admin_add_centre') }}" class="btn btn-success">
+        <i class="fa-solid fa-plus-circle me-1"></i> Add New Centre
+      </a>
+    </div>
+  </div>
+
+  <div class="card card-eco shadow-sm bg-white">
+    <div class="card-body p-0">
+      {% if centres %}
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0 small">
+          <thead class="table-light">
+            <tr>
+              <th class="ps-3">Centre Name & Facility Type</th>
+              <th>District, City & Address</th>
+              <th>Contact Number</th>
+              <th>Accepted Categories</th>
+              <th>Verification Status</th>
+              <th>Last Verified</th>
+              <th class="text-end pe-3">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for c in centres %}
+            <tr>
+              <td class="ps-3 fw-bold text-dark">
+                {{ c.centre_name }}
+                <div>
+                  <span class="badge bg-secondary-subtle text-dark border" style="font-size: 0.72rem;">
+                    {{ c.facility_type or 'Authorized Facility' }}
+                  </span>
+                </div>
+                {% if c.website_url and c.website_url != '#' %}
+                <a href="{{ c.website_url }}" target="_blank" rel="noopener"
+                  class="small text-muted text-decoration-none">
+                  <i class="fa-solid fa-globe me-1"></i> Website
+                </a>
+                {% endif %}
+              </td>
+              <td>
+                <div style="max-width: 240px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                  title="{{ c.complete_address }}">
+                  {{ c.complete_address }}
+                </div>
+                <span class="badge bg-light text-secondary border mt-1">
+                  {{ c.city }}{% if c.district %}, {{ c.district }}{% endif %}{% if c.pincode %} - {{ c.pincode }}{%
+                  endif %}
+                </span>
+              </td>
+              <td>
+                <span class="d-block">{{ c.contact_phone or 'Contact details not available' }}</span>
+                {% if c.contact_email %}
+                <span class="text-muted" style="font-size: 0.75rem;">{{ c.contact_email }}</span>
+                {% endif %}
+              </td>
+              <td>
+                <div style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                  title="{{ c.accepted_categories }}">
+                  {{ c.accepted_categories }}
+                </div>
+              </td>
+              <td>
+                {% if c.is_official_verified %}
+                <span class="badge bg-success-subtle text-success border border-success-subtle"
+                  style="font-size: 0.72rem;">
+                  <i class="fa-solid fa-shield-check"></i> CPCB/KSPCB Verified
+                </span>
+                {% else %}
+                <span class="badge bg-secondary-subtle text-secondary" style="font-size: 0.72rem;">
+                  Unverified
+                </span>
+                {% endif %}
+              </td>
+              <td class="text-muted">{{ c.last_verified_date }}</td>
+              <td class="text-end pe-3 text-nowrap">
+                <a href="{{ url_for('admin_edit_centre', centre_id=c.id) }}" class="btn btn-sm btn-outline-primary"
+                  title="Edit Centre">
+                  <i class="fa-solid fa-pen-to-square"></i>
+                </a>
+                <form action="{{ url_for('admin_delete_centre', centre_id=c.id) }}" method="POST" class="d-inline"
+                  onsubmit="return confirm('Are you sure you want to delete {{ c.centre_name }}?');">
+                  <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete Centre">
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </form>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <div class="text-center py-5 text-muted small">No recycling centres found in the database.</div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

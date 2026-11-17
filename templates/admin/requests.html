@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+
+{% block title %}Manage Collection Requests - Admin Portal{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <div>
+      <h3 class="fw-bold mb-1">Manage E-Waste Collection Requests</h3>
+      <p class="text-muted small mb-0">Review citizen requests, update delivery/pickup statuses, and add administrative remarks.</p>
+    </div>
+    <div>
+      <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-secondary">
+        <i class="fa-solid fa-arrow-left me-1"></i> Dashboard
+      </a>
+    </div>
+  </div>
+
+  <!-- Filter Bar -->
+  <div class="card card-eco p-3 mb-4 bg-white shadow-sm">
+    <div class="d-flex flex-wrap gap-2 align-items-center">
+      <span class="small fw-bold text-muted me-2"><i class="fa-solid fa-filter me-1"></i> Filter by Status:</span>
+      <a href="{{ url_for('admin_requests') }}" class="btn btn-sm {% if not selected_status %}btn-dark{% else %}btn-outline-secondary{% endif %} rounded-pill">All</a>
+      <a href="{{ url_for('admin_requests', status='Pending') }}" class="btn btn-sm {% if selected_status == 'Pending' %}btn-warning{% else %}btn-outline-warning text-dark{% endif %} rounded-pill">Pending</a>
+      <a href="{{ url_for('admin_requests', status='Approved') }}" class="btn btn-sm {% if selected_status == 'Approved' %}btn-primary{% else %}btn-outline-primary{% endif %} rounded-pill">Approved</a>
+      <a href="{{ url_for('admin_requests', status='In Progress') }}" class="btn btn-sm {% if selected_status == 'In Progress' %}btn-info text-white{% else %}btn-outline-info{% endif %} rounded-pill">In Progress</a>
+      <a href="{{ url_for('admin_requests', status='Completed') }}" class="btn btn-sm {% if selected_status == 'Completed' %}btn-success{% else %}btn-outline-success{% endif %} rounded-pill">Completed</a>
+      <a href="{{ url_for('admin_requests', status='Rejected') }}" class="btn btn-sm {% if selected_status == 'Rejected' %}btn-danger{% else %}btn-outline-danger{% endif %} rounded-pill">Rejected</a>
+    </div>
+  </div>
+
+  <!-- Requests Table -->
+  <div class="card card-eco shadow-sm bg-white">
+    <div class="card-body p-0">
+      {% if requests %}
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0 small">
+            <thead class="table-light">
+              <tr>
+                <th class="ps-3">Request ID</th>
+                <th>Citizen Information</th>
+                <th>Pickup Location</th>
+                <th>Scheduled Date</th>
+                <th>Preference</th>
+                <th>Items</th>
+                <th>Status</th>
+                <th>Admin Remark</th>
+                <th class="text-end pe-3">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for req in requests %}
+                <tr>
+                  <td class="ps-3 fw-bold font-monospace text-primary">
+                    <a href="{{ url_for('track_request_direct', request_code=req.request_code) }}" class="text-decoration-none">
+                      {{ req.request_code }}
+                    </a>
+                  </td>
+                  <td>
+                    <strong>{{ req.user.full_name }}</strong><br>
+                    <span class="text-muted">{{ req.user.phone }}</span>
+                  </td>
+                  <td>
+                    <div style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="{{ req.pickup_address }}, {{ req.city }}">
+                      {{ req.pickup_address }}, {{ req.city }}
+                    </div>
+                  </td>
+                  <td>{{ req.preferred_date }}</td>
+                  <td>
+                    <span class="badge bg-light text-dark border">{{ req.preference_type }}</span>
+                  </td>
+                  <td>
+                    <button class="btn btn-sm btn-link p-0 text-decoration-none" data-bs-toggle="collapse" data-bs-target="#itemsCollapse{{ req.id }}">
+                      {{ req.items|length }} items <i class="fa-solid fa-chevron-down small"></i>
+                    </button>
+                  </td>
+                  <td>
+                    {% if req.status == 'Pending' %}
+                      <span class="badge-status badge-status-pending">Pending</span>
+                    {% elif req.status == 'Approved' %}
+                      <span class="badge-status badge-status-approved">Approved</span>
+                    {% elif req.status == 'In Progress' %}
+                      <span class="badge-status badge-status-in-progress">In Progress</span>
+                    {% elif req.status == 'Completed' %}
+                      <span class="badge-status badge-status-completed">Completed</span>
+                    {% else %}
+                      <span class="badge-status badge-status-rejected">Rejected</span>
+                    {% endif %}
+                  </td>
+                  <td class="text-muted" style="max-width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    {{ req.admin_notes or 'None' }}
+                  </td>
+                  <td class="text-end pe-3">
+                    <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalReq{{ req.id }}">
+                      <i class="fa-solid fa-pen-to-square"></i> Update
+                    </button>
+                    <a href="{{ url_for('request_receipt', request_code=req.request_code) }}" class="btn btn-sm btn-outline-secondary" title="View Receipt">
+                      <i class="fa-solid fa-file-invoice"></i>
+                    </a>
+                  </td>
+                </tr>
+
+                <!-- Collapsible Items Row -->
+                <tr class="collapse bg-light" id="itemsCollapse{{ req.id }}">
+                  <td colspan="9" class="p-3">
+                    <div class="card p-2 bg-white">
+                      <h6 class="fw-bold mb-2 small">E-Waste Items in Request {{ req.request_code }}:</h6>
+                      <ul class="mb-0 small">
+                        {% for it in req.items %}
+                          <li><strong>{{ it.item_name }}</strong> ({{ it.category }}) - Condition: {{ it.item_condition }} | Qty: {{ it.quantity }}</li>
+                        {% endfor %}
+                      </ul>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Status Update Modal -->
+                <div class="modal fade" id="modalReq{{ req.id }}" tabindex="-1" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <form action="{{ url_for('admin_update_request', req_id=req.id) }}" method="POST">
+                        <div class="modal-header">
+                          <h5 class="modal-title">Review Request: {{ req.request_code }}</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-start">
+                          <div class="mb-3">
+                            <label class="form-label small fw-bold">Update Request Status</label>
+                            <select name="status" class="form-select" required>
+                              <option value="Pending" {% if req.status == 'Pending' %}selected{% endif %}>Pending</option>
+                              <option value="Approved" {% if req.status == 'Approved' %}selected{% endif %}>Approved (Scheduled)</option>
+                              <option value="In Progress" {% if req.status == 'In Progress' %}selected{% endif %}>In Progress (Out for collection)</option>
+                              <option value="Completed" {% if req.status == 'Completed' %}selected{% endif %}>Completed (Recycled)</option>
+                              <option value="Rejected" {% if req.status == 'Rejected' %}selected{% endif %}>Rejected</option>
+                            </select>
+                          </div>
+                          <div class="mb-3">
+                            <label class="form-label small fw-bold">Admin Remarks</label>
+                            <textarea name="admin_notes" class="form-control" rows="3">{{ req.admin_notes or '' }}</textarea>
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-success">Update Request</button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <div class="text-center py-5 text-muted small">No requests match this filter.</div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+

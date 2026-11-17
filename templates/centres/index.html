@@ -1,0 +1,285 @@
+{% extends 'base.html' %}
+
+{% block title %}Authorized E-Waste Collection & Recycling Centres - E-Waste Collection Drive{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <!-- Breadcrumb -->
+  <nav aria-label="breadcrumb" class="mb-3">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{{ url_for('index') }}" class="text-success text-decoration-none">Home</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">Authorized Collection & Recycling Centres</li>
+    </ol>
+  </nav>
+
+  <!-- Module Header -->
+  <div class="row align-items-center mb-4 g-3">
+    <div class="col-lg-8">
+      <span
+        class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 rounded-pill fw-bold mb-2">
+        <i class="fa-solid fa-building-circle-check me-1"></i> Objective 2: Statutory Directory
+      </span>
+      <h2 class="fw-bold mb-1">Authorized E-Waste Collection & Recycling Facilities</h2>
+      <p class="text-secondary small mb-0">
+        Official statutory directory of authorized recyclers, dismantlers, refurbishers, and collection centres verified
+        under the Central Pollution Control Board (CPCB) E-Waste EPR Portal and the Karnataka State Pollution Control
+        Board (KSPCB).
+      </p>
+    </div>
+    <div class="col-lg-4 text-lg-end">
+      <div class="bg-white border rounded p-2 text-start d-inline-block small shadow-sm">
+        <div class="d-flex align-items-center gap-2 mb-1">
+          <span class="badge bg-success-subtle text-success border border-success-subtle" style="font-size: 0.75rem;"><i
+              class="fa-solid fa-shield-check"></i> CPCB / KSPCB Verified</span>
+          <span class="text-muted">= Verified Statutory Facility</span>
+        </div>
+        <div class="text-muted" style="font-size: 0.72rem;">
+          <i class="fa-solid fa-circle-info text-info me-1"></i> No unverified or dummy records displayed.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search & Filter Card -->
+  <div class="card card-eco shadow-sm p-4 mb-4 bg-white">
+    <form method="GET" action="{{ url_for('centres') }}" class="row g-3">
+      <!-- Search Keyword / Centre Name -->
+      <div class="col-md-4">
+        <label for="searchInput" class="form-label small fw-semibold">Search by Name or Keyword</label>
+        <div class="input-group">
+          <span class="input-group-text bg-light"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
+          <input type="text" class="form-control" id="searchInput" name="search"
+            placeholder="e.g. E-Parisaraa, Peenya, Hoskote..." value="{{ search_query }}">
+        </div>
+      </div>
+
+      <!-- District Filter -->
+      <div class="col-md-3">
+        <label for="districtSelect" class="form-label small fw-semibold">District</label>
+        <select class="form-select" id="districtSelect" name="district">
+          <option value="">-- All Districts --</option>
+          {% for dist in districts %}
+          <option value="{{ dist }}" {% if search_district==dist %}selected{% endif %}>{{ dist }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <!-- PIN Code Input -->
+      <div class="col-md-2">
+        <label for="pincodeInput" class="form-label small fw-semibold">PIN Code</label>
+        <div class="input-group">
+          <span class="input-group-text bg-light"><i class="fa-solid fa-map-pin text-muted"></i></span>
+          <input type="text" class="form-control" id="pincodeInput" name="pincode" placeholder="e.g. 560058"
+            value="{{ search_pincode }}">
+        </div>
+      </div>
+
+      <!-- Facility Type Filter -->
+      <div class="col-md-3">
+        <label for="facilityTypeSelect" class="form-label small fw-semibold">Facility Type</label>
+        <select class="form-select" id="facilityTypeSelect" name="facility_type">
+          <option value="">-- All Facility Types --</option>
+          {% for ft in facility_types %}
+          <option value="{{ ft }}" {% if search_facility_type==ft %}selected{% endif %}>{{ ft }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <!-- City Filter -->
+      <div class="col-md-4">
+        <label for="citySelect" class="form-label small fw-semibold">City / Town</label>
+        <select class="form-select" id="citySelect" name="city">
+          <option value="">-- All Cities --</option>
+          {% for c in cities %}
+          <option value="{{ c }}" {% if search_city==c %}selected{% endif %}>{{ c }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <!-- Category Filter -->
+      <div class="col-md-5">
+        <label for="categorySelect" class="form-label small fw-semibold">Filter by Accepted Category</label>
+        <select class="form-select" id="categorySelect" name="category">
+          <option value="">-- All Categories Accepted --</option>
+          {% for cat in categories %}
+          <option value="{{ cat }}" {% if search_category==cat %}selected{% endif %}>{{ cat }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <!-- Submit & Reset Buttons -->
+      <div class="col-md-3 d-flex align-items-end gap-2">
+        <button type="submit" class="btn btn-success flex-grow-1 fw-semibold">
+          <i class="fa-solid fa-filter me-1"></i> Apply Filters
+        </button>
+        <a href="{{ url_for('centres') }}" class="btn btn-outline-secondary" title="Reset All Filters">
+          <i class="fa-solid fa-rotate-left"></i>
+        </a>
+      </div>
+    </form>
+  </div>
+
+  <!-- Results Count Badge -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <span class="text-muted small">
+      Showing <strong>{{ centres|length }}</strong> authorized e-waste facilities
+    </span>
+  </div>
+
+  <!-- Centres Grid -->
+  <div class="row g-4">
+    {% if centres %}
+    {% for centre in centres %}
+    <div class="col-lg-6">
+      <div class="card card-eco h-100 p-4 bg-white position-relative d-flex flex-column">
+        <!-- Badges Bar: Facility Type & Verification Badge -->
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2">
+          <div class="d-flex flex-wrap gap-1 align-items-center">
+            <!-- Facility Type Badge -->
+            {% if centre.facility_type == 'Authorized Recycler' %}
+            <span class="badge bg-success text-white px-2 py-1">
+              <i class="fa-solid fa-recycle me-1"></i> Authorized Recycler
+            </span>
+            {% elif centre.facility_type == 'Authorized Dismantler' %}
+            <span class="badge bg-primary text-white px-2 py-1">
+              <i class="fa-solid fa-screwdriver-wrench me-1"></i> Authorized Dismantler
+            </span>
+            {% elif centre.facility_type == 'Collection Centre' %}
+            <span class="badge bg-info text-dark px-2 py-1">
+              <i class="fa-solid fa-box-archive me-1"></i> Collection Centre
+            </span>
+            {% elif centre.facility_type == 'Authorized Refurbisher' %}
+            <span class="badge text-white px-2 py-1" style="background-color: #6f42c1;">
+              <i class="fa-solid fa-laptop-medical me-1"></i> Authorized Refurbisher
+            </span>
+            {% else %}
+            <span class="badge bg-secondary text-white px-2 py-1">
+              {{ centre.facility_type or 'E-Waste Facility' }}
+            </span>
+            {% endif %}
+
+            <!-- Verification Badge (shown only for verified records) -->
+            {% if centre.is_official_verified %}
+            <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1">
+              <i class="fa-solid fa-circle-check me-1"></i> CPCB / KSPCB Verified
+            </span>
+            {% endif %}
+          </div>
+
+          <!-- Verification Date -->
+          <div class="text-muted small">
+            <i class="fa-solid fa-calendar-check text-success me-1"></i> Verified: <strong>{{ centre.last_verified_date
+              }}</strong>
+          </div>
+        </div>
+
+        <!-- Centre Name -->
+        <h4 class="fw-bold text-dark mt-2 mb-2">{{ centre.centre_name }}</h4>
+
+        <!-- Address, City, District & PIN Code -->
+        <p class="text-secondary small mb-3">
+          <i class="fa-solid fa-location-dot text-danger me-1"></i> {{ centre.complete_address }}
+          <br>
+          <span class="badge bg-light text-secondary border mt-1 me-1">
+            <i class="fa-solid fa-city me-1"></i> {{ centre.city }}{% if centre.district %}, {{ centre.district }}{%
+            endif %}
+          </span>
+          {% if centre.pincode %}
+          <span class="badge bg-light text-secondary border mt-1">
+            <i class="fa-solid fa-map-pin me-1"></i> PIN: {{ centre.pincode }}
+          </span>
+          {% endif %}
+        </p>
+
+        <!-- Services Offered -->
+        {% if centre.services_offered %}
+        <div class="mb-3">
+          <strong class="small text-dark d-block mb-1">Facility Operations & Services:</strong>
+          <p class="small text-muted mb-0 bg-light p-2 rounded border">
+            {{ centre.services_offered }}
+          </p>
+        </div>
+        {% endif %}
+
+        <!-- Accepted Categories -->
+        <div class="mb-3">
+          <strong class="small text-dark d-block mb-1">Accepted E-Waste Categories:</strong>
+          <div class="d-flex flex-wrap gap-1">
+            {% if centre.accepted_categories %}
+            {% for cat_item in centre.accepted_categories.split(',') %}
+            <span class="badge bg-success-subtle text-success border border-success-subtle">{{ cat_item.strip()
+              }}</span>
+            {% endfor %}
+            {% else %}
+            <span class="text-muted small">Contact facility for accepted category list</span>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Contact Details & Official Source Link -->
+        <div class="row g-2 mb-3 small border-top pt-2">
+          <div class="col-sm-6">
+            <i class="fa-solid fa-phone text-success me-1"></i> <strong>Contact Number:</strong><br>
+            {% if centre.contact_phone and centre.contact_phone != 'N/A' and centre.contact_phone.strip() != '' %}
+            <a href="tel:{{ centre.contact_phone }}" class="text-decoration-none text-dark fw-semibold">{{
+              centre.contact_phone }}</a>
+            {% else %}
+            <span class="text-muted fst-italic">Contact details not available</span>
+            {% endif %}
+          </div>
+
+          <div class="col-sm-6">
+            <i class="fa-solid fa-envelope text-primary me-1"></i> <strong>Email:</strong><br>
+            {% if centre.contact_email and centre.contact_email != 'N/A' and centre.contact_email.strip() != '' %}
+            <a href="mailto:{{ centre.contact_email }}" class="text-decoration-none text-dark">{{ centre.contact_email
+              }}</a>
+            {% else %}
+            <span class="text-muted fst-italic">Contact details not available</span>
+            {% endif %}
+          </div>
+
+          <div class="col-12 mt-2">
+            <i class="fa-solid fa-link text-info me-1"></i> <strong>Official Source Registry:</strong><br>
+            {% if centre.source_url %}
+            <a href="{{ centre.source_url }}" target="_blank" rel="noopener"
+              class="text-break small text-decoration-none text-success" title="View Official Government Listing">
+              {{ centre.source_url }} <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.72rem;"></i>
+            </a>
+            {% else %}
+            <span class="text-muted fst-italic">Official portal listing</span>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Footer Actions -->
+        <div class="mt-auto d-flex flex-wrap justify-content-between align-items-center pt-3 border-top gap-2">
+          <div>
+            {% if centre.website_url and centre.website_url != '#' %}
+            <a href="{{ centre.website_url }}" target="_blank" rel="noopener" class="btn btn-sm btn-outline-secondary">
+              <i class="fa-solid fa-globe me-1"></i> Official Website
+            </a>
+            {% endif %}
+          </div>
+          <div>
+            {% if centre.is_official_verified and centre.directions_url %}
+            <a href="{{ centre.directions_url }}" target="_blank" rel="noopener" class="btn btn-sm btn-primary">
+              <i class="fa-solid fa-diamond-turn-right me-1"></i> Get Directions (Google Maps)
+            </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="col-12 text-center py-5">
+      <i class="fa-solid fa-building-slash fs-1 text-muted mb-3"></i>
+      <h5 class="fw-bold">No Authorized Centres Match Your Search Criteria</h5>
+      <p class="text-muted small">Try broadening your city, district, or PIN code search parameters.</p>
+      <a href="{{ url_for('centres') }}" class="btn btn-sm btn-success">View All Authorized Centres</a>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

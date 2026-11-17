@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ action }} Recycling Centre - Admin Portal{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <!-- Breadcrumb -->
+  <nav aria-label="breadcrumb" class="mb-3">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{{ url_for('admin_dashboard') }}"
+          class="text-success text-decoration-none">Admin</a></li>
+      <li class="breadcrumb-item"><a href="{{ url_for('admin_centres') }}"
+          class="text-success text-decoration-none">Centres</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{{ action }} Centre</li>
+    </ol>
+  </nav>
+
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card card-eco shadow-sm p-4 bg-white">
+        <h4 class="fw-bold mb-3 border-bottom pb-2">
+          <i class="fa-solid fa-building-circle-check text-success me-2"></i> {{ action }} Authorized Recycling Centre
+        </h4>
+
+        <form method="POST" class="needs-validation" novalidate>
+          <div class="row g-3">
+            <div class="col-md-5">
+              <label class="form-label small fw-semibold">Centre / Company Name <span
+                  class="text-danger">*</span></label>
+              <input type="text" class="form-control" name="centre_name"
+                value="{{ centre.centre_name if centre else '' }}" placeholder="e.g. M/s. E-Parisaraa Pvt. Ltd."
+                required>
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label small fw-semibold">Facility Type <span class="text-danger">*</span></label>
+              <select class="form-select" name="facility_type" required>
+                <option value="Authorized Recycler" {% if centre and centre.facility_type=='Authorized Recycler'
+                  %}selected{% endif %}>Authorized Recycler</option>
+                <option value="Authorized Dismantler" {% if centre and centre.facility_type=='Authorized Dismantler'
+                  %}selected{% endif %}>Authorized Dismantler</option>
+                <option value="Collection Centre" {% if centre and centre.facility_type=='Collection Centre'
+                  %}selected{% endif %}>Collection Centre</option>
+                <option value="Authorized Refurbisher" {% if centre and centre.facility_type=='Authorized Refurbisher'
+                  %}selected{% endif %}>Authorized Refurbisher</option>
+              </select>
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label small fw-semibold">Verification Badge <span class="text-danger">*</span></label>
+              <select class="form-select" name="is_official_verified" required>
+                <option value="1" {% if not centre or centre.is_official_verified %}selected{% endif %}>Official
+                  Verified</option>
+                <option value="0" {% if centre and not centre.is_official_verified %}selected{% endif %}>Unverified
+                </option>
+              </select>
+            </div>
+
+            <div class="col-12">
+              <label class="form-label small fw-semibold">Complete Address <span class="text-danger">*</span></label>
+              <textarea class="form-control" name="complete_address" rows="2"
+                placeholder="Full street address, industrial area, plot number..."
+                required>{{ centre.complete_address if centre else '' }}</textarea>
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label small fw-semibold">City / Town <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" name="city" value="{{ centre.city if centre else 'Bengaluru' }}"
+                required>
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label small fw-semibold">District</label>
+              <input type="text" class="form-control" name="district"
+                value="{{ centre.district if centre else 'Bengaluru Urban' }}" placeholder="e.g. Bengaluru Urban">
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label small fw-semibold">PIN Code</label>
+              <input type="text" class="form-control" name="pincode" value="{{ centre.pincode if centre else '' }}"
+                placeholder="e.g. 560058">
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label small fw-semibold">State</label>
+              <input type="text" class="form-control" name="state" value="{{ centre.state if centre else 'Karnataka' }}"
+                required>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label small fw-semibold">Contact Phone Number</label>
+              <input type="text" class="form-control" name="contact_phone"
+                value="{{ centre.contact_phone if centre else '' }}" placeholder="+91 80 2836 2929">
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label small fw-semibold">Official Contact Email</label>
+              <input type="email" class="form-control" name="contact_email"
+                value="{{ centre.contact_email if centre else '' }}" placeholder="contact@ecobirdd.com">
+            </div>
+
+            <div class="col-12">
+              <label class="form-label small fw-semibold">Official Website Link</label>
+              <input type="url" class="form-control" name="website_url"
+                value="{{ centre.website_url if centre else '' }}" placeholder="https://www.ecobirdd.com">
+            </div>
+
+            <div class="col-12">
+              <label class="form-label small fw-semibold">Accepted E-Waste Categories <span
+                  class="text-danger">*</span></label>
+              <input type="text" class="form-control" name="accepted_categories"
+                value="{{ centre.accepted_categories if centre else 'Mobile Phones, Laptops, Computers, Batteries, Chargers, Televisions, Other Electronics' }}"
+                placeholder="Comma separated list" required>
+            </div>
+
+            <div class="col-12">
+              <label class="form-label small fw-semibold">Available Services & Processes</label>
+              <textarea class="form-control" name="services_offered" rows="2"
+                placeholder="e.g. Certified E-Waste Dismantling, PCB Shredding, Precious Metal Reclamation...">{{ centre.services_offered if centre else '' }}</textarea>
+            </div>
+
+            <div class="col-md-8">
+              <label class="form-label small fw-semibold">Statutory Source URL (CPCB / KSPCB / MoEFCC) <span
+                  class="text-danger">*</span></label>
+              <input type="text" class="form-control" name="source_url"
+                value="{{ centre.source_url if centre else 'https://kspcb.karnataka.gov.in/sites/default/files/inline-files/Registered-E-waste-Dismantlers-Recyclers-Karnataka.pdf' }}"
+                required>
+              <div class="form-text small">Must point to the official government gazette or registration registry.</div>
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label small fw-semibold">Last Verified Date <span class="text-danger">*</span></label>
+              <input type="date" class="form-control" name="last_verified_date"
+                value="{{ centre.last_verified_date.strftime('%Y-%m-%d') if (centre and centre.last_verified_date) else '' }}"
+                required>
+            </div>
+
+            <div class="col-12">
+              <label class="form-label small fw-semibold">Google Maps Directions Link</label>
+              <input type="text" class="form-control" name="directions_url"
+                value="{{ centre.directions_url if centre else '' }}"
+                placeholder="https://www.google.com/maps/search/?api=1&query=...">
+            </div>
+
+            <div class="col-12 mt-4 d-flex justify-content-between">
+              <a href="{{ url_for('admin_centres') }}" class="btn btn-outline-secondary">
+                <i class="fa-solid fa-arrow-left me-1"></i> Cancel
+              </a>
+              <button type="submit" class="btn btn-success px-4">
+                <i class="fa-solid fa-floppy-disk me-1"></i> Save Centre Information
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  // Set default verified date to today if empty
+  document.addEventListener('DOMContentLoaded', function () {
+    const vDate = document.querySelector('input[name="last_verified_date"]');
+    if (vDate && !vDate.value) {
+      vDate.value = new Date().toISOString().split('T')[0];
+    }
+  });
+</script>
+{% endblock %}

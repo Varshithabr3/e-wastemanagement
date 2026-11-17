@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+
+{% block title %}My E-Waste Items - E-Waste Collection Drive{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <!-- Breadcrumb -->
+  <nav aria-label="breadcrumb" class="mb-3">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{{ url_for('user_dashboard') }}" class="text-success text-decoration-none">Dashboard</a></li>
+      <li class="breadcrumb-item active" aria-current="page">My E-Waste Inventory</li>
+    </ol>
+  </nav>
+
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <div>
+      <h3 class="fw-bold mb-1">My E-Waste Inventory</h3>
+      <p class="text-muted small mb-0">List of all electronic items you have cataloged for responsible recycling.</p>
+    </div>
+    <div class="d-flex gap-2">
+      <a href="{{ url_for('register_ewaste') }}" class="btn btn-success">
+        <i class="fa-solid fa-plus-circle me-1"></i> Register New Item
+      </a>
+      <a href="{{ url_for('submit_request') }}" class="btn btn-primary">
+        <i class="fa-solid fa-truck-pickup me-1"></i> Schedule Collection
+      </a>
+    </div>
+  </div>
+
+  <!-- Filter Card -->
+  <div class="card card-eco shadow-sm p-3 mb-4 bg-white">
+    <form method="GET" action="{{ url_for('my_ewaste_items') }}" class="row g-2 align-items-center">
+      <div class="col-md-5">
+        <select name="category" class="form-select form-select-sm">
+          <option value="">-- All Categories --</option>
+          {% for cat in categories %}
+            <option value="{{ cat }}" {% if selected_category == cat %}selected{% endif %}>{{ cat }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-5">
+        <select name="status" class="form-select form-select-sm">
+          <option value="">-- All Inventory Statuses --</option>
+          <option value="Available" {% if selected_status == 'Available' %}selected{% endif %}>Available for Request</option>
+          <option value="In Request" {% if selected_status == 'In Request' %}selected{% endif %}>In Active Request</option>
+          <option value="Collected" {% if selected_status == 'Collected' %}selected{% endif %}>Collected</option>
+        </select>
+      </div>
+      <div class="col-md-2 d-flex gap-1">
+        <button type="submit" class="btn btn-sm btn-outline-success w-100">Filter</button>
+        <a href="{{ url_for('my_ewaste_items') }}" class="btn btn-sm btn-outline-secondary" title="Reset Filters"><i class="fa-solid fa-rotate-left"></i></a>
+      </div>
+    </form>
+  </div>
+
+  <!-- Items Table / Grid -->
+  <div class="card card-eco shadow-sm">
+    <div class="card-body p-0">
+      {% if items %}
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="table-light small">
+              <tr>
+                <th class="ps-3">Item Details</th>
+                <th>Category</th>
+                <th>Qty</th>
+                <th>Condition</th>
+                <th>Location</th>
+                <th>Status</th>
+                <th>Logged On</th>
+                <th class="text-end pe-3">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in items %}
+                <tr>
+                  <td class="ps-3">
+                    <div class="d-flex align-items-center gap-3">
+                      {% if item.image_filename %}
+                        <img src="{{ url_for('static', filename='uploads/' + item.image_filename) }}" alt="Item Photo" class="rounded border" style="width: 48px; height: 48px; object-fit: cover;">
+                      {% else %}
+                        <div class="bg-light rounded border d-flex align-items-center justify-content-center text-muted" style="width: 48px; height: 48px;">
+                          <i class="fa-solid fa-microchip fs-4"></i>
+                        </div>
+                      {% endif %}
+                      <div>
+                        <div class="fw-bold text-dark">{{ item.item_name }}</div>
+                        {% if item.description %}
+                          <small class="text-muted d-block" style="max-width: 280px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            {{ item.description }}
+                          </small>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </td>
+                  <td><span class="badge bg-success-subtle text-success">{{ item.category }}</span></td>
+                  <td><span class="badge bg-light text-dark border">{{ item.quantity }}</span></td>
+                  <td>
+                    {% if item.item_condition == 'Working' %}
+                      <span class="badge bg-success-subtle text-success border border-success-subtle">Working</span>
+                    {% elif item.item_condition == 'Damaged' %}
+                      <span class="badge bg-warning-subtle text-warning border border-warning-subtle">Damaged</span>
+                    {% else %}
+                      <span class="badge bg-danger-subtle text-danger border border-danger-subtle">Not Working</span>
+                    {% endif %}
+                  </td>
+                  <td class="small text-secondary">{{ item.location }}</td>
+                  <td>
+                    {% if item.status == 'Available' %}
+                      <span class="badge bg-info-subtle text-info border border-info-subtle">
+                        <i class="fa-solid fa-circle-check me-1"></i> Available
+                      </span>
+                    {% elif item.status == 'In Request' %}
+                      <span class="badge bg-warning-subtle text-warning border border-warning-subtle">
+                        <i class="fa-solid fa-clock me-1"></i> In Request
+                      </span>
+                    {% elif item.status == 'Collected' %}
+                      <span class="badge bg-success-subtle text-success border border-success-subtle">
+                        <i class="fa-solid fa-check-double me-1"></i> Collected
+                      </span>
+                    {% else %}
+                      <span class="badge bg-secondary-subtle text-secondary">{{ item.status }}</span>
+                    {% endif %}
+                  </td>
+                  <td class="small text-muted">{{ item.created_at.strftime('%Y-%m-%d') }}</td>
+                  <td class="text-end pe-3">
+                    {% if item.status == 'Available' %}
+                      <form action="{{ url_for('delete_ewaste_item', item_id=item.id) }}" method="POST" class="d-inline" onsubmit="return confirm('Remove this registered item from your inventory?');">
+                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete unassigned item">
+                          <i class="fa-solid fa-trash"></i>
+                        </button>
+                      </form>
+                    {% else %}
+                      <button class="btn btn-sm btn-outline-secondary" disabled title="Cannot delete item linked to a collection request">
+                        <i class="fa-solid fa-lock"></i>
+                      </button>
+                    {% endif %}
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <div class="text-center py-5">
+          <i class="fa-solid fa-box-open fs-1 text-muted mb-2"></i>
+          <h5 class="fw-bold">No Items Found</h5>
+          <p class="text-muted small">Try resetting your filters or register a new e-waste item.</p>
+          <a href="{{ url_for('register_ewaste') }}" class="btn btn-sm btn-success">Register New Item</a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+

@@ -1,0 +1,419 @@
+/* ==========================================================================
+   E-Waste Collection Drive & Public Awareness Management System
+   Theme: Nature Green, Pristine White, Light Blue Eco-Palette
+   ========================================================================== */
+
+:root {
+  --eco-primary: #198754;
+  --eco-primary-dark: #0f5132;
+  --eco-primary-light: #d1e7dd;
+  --eco-secondary: #0d6efd;
+  --eco-accent: #20c997;
+  --eco-teal: #0dcaf0;
+  --eco-bg: #f8fafc;
+  --eco-card-bg: #ffffff;
+  --eco-text: #1e293b;
+  --eco-text-muted: #64748b;
+  --eco-border: #e2e8f0;
+  --eco-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  --eco-shadow-hover: 0 8px 30px rgba(25, 135, 84, 0.12);
+  --font-family-base: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+body {
+  font-family: var(--font-family-base);
+  background-color: var(--eco-bg);
+  color: var(--eco-text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+/* Navbar Styling */
+.navbar-eco {
+  background: #ffffff;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.06);
+  border-bottom: 2px solid #e8f5e9;
+  padding: 0.75rem 0;
+}
+
+.navbar-brand-eco {
+  font-weight: 700;
+  color: var(--eco-primary) !important;
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.navbar-brand-eco i {
+  color: var(--eco-accent);
+  font-size: 1.5rem;
+}
+
+.nav-link {
+  font-weight: 500;
+  color: #334155 !important;
+  padding: 0.5rem 0.85rem !important;
+  transition: all 0.2s ease;
+  border-radius: 6px;
+}
+
+.nav-link:hover, .nav-link.active {
+  color: var(--eco-primary) !important;
+  background-color: #f0fdf4;
+}
+
+/* Academic Disclaimer Bar */
+.academic-notice-bar {
+  background: linear-gradient(90deg, #0f5132 0%, #198754 50%, #0d6efd 100%);
+  color: #ffffff;
+  font-size: 0.82rem;
+  padding: 0.45rem 1rem;
+  letter-spacing: 0.3px;
+  text-align: center;
+}
+
+/* Hero Section */
+.hero-eco {
+  background: linear-gradient(135deg, #e8f5e9 0%, #e0f2fe 100%);
+  padding: 4.5rem 0 3.5rem 0;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid #dcfce7;
+}
+
+.hero-eco::after {
+  content: '';
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(32, 201, 151, 0.15) 0%, rgba(255,255,255,0) 70%);
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.hero-title {
+  font-weight: 800;
+  color: #0f5132;
+  line-height: 1.2;
+}
+
+.hero-subtitle {
+  color: #334155;
+  font-size: 1.15rem;
+}
+
+/* Eco Cards */
+.card-eco {
+  background: var(--eco-card-bg);
+  border: 1px solid var(--eco-border);
+  border-radius: 12px;
+  box-shadow: var(--eco-shadow);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card-eco:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--eco-shadow-hover);
+  border-color: #a7f3d0;
+}
+
+.card-header-eco {
+  background: #f0fdf4;
+  border-bottom: 1px solid #dcfce7;
+  font-weight: 600;
+  color: var(--eco-primary-dark);
+}
+
+/* Stat Counter Cards */
+.stat-box {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  border-left: 5px solid var(--eco-primary);
+  box-shadow: var(--eco-shadow);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stat-box.blue { border-left-color: var(--eco-secondary); }
+.stat-box.teal { border-left-color: var(--eco-teal); }
+.stat-box.warning { border-left-color: #ffc107; }
+
+.stat-number {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--eco-text);
+  line-height: 1;
+}
+
+.stat-label {
+  color: var(--eco-text-muted);
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 0.35rem;
+}
+
+.stat-icon {
+  font-size: 2.4rem;
+  opacity: 0.85;
+}
+
+/* Badges */
+.badge-verified-official {
+  background-color: #d1e7dd;
+  color: #0f5132;
+  border: 1px solid #a3cfbb;
+  font-weight: 600;
+  padding: 0.4rem 0.75rem;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.badge-verified-demo {
+  background-color: #fff3cd;
+  color: #664d03;
+  border: 1px solid #ffe69c;
+  font-weight: 600;
+  padding: 0.4rem 0.75rem;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.badge-status {
+  padding: 0.4rem 0.75rem;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+.badge-status-pending { background-color: #fff3cd; color: #856404; }
+.badge-status-approved { background-color: #cfe2ff; color: #084298; }
+.badge-status-in-progress { background-color: #cff4fc; color: #055160; }
+.badge-status-completed { background-color: #d1e7dd; color: #0f5132; }
+.badge-status-rejected { background-color: #f8d7da; color: #842029; }
+
+/* Timeline Stepper for Tracking */
+.tracking-stepper {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  margin: 2rem 0;
+}
+
+.tracking-stepper::before {
+  content: '';
+  position: absolute;
+  top: 24px;
+  left: 30px;
+  right: 30px;
+  height: 4px;
+  background-color: #e2e8f0;
+  z-index: 1;
+}
+
+.stepper-progress {
+  position: absolute;
+  top: 24px;
+  left: 30px;
+  height: 4px;
+  background-color: var(--eco-primary);
+  z-index: 2;
+  transition: width 0.4s ease;
+}
+
+.step-item {
+  position: relative;
+  z-index: 3;
+  text-align: center;
+  flex: 1;
+}
+
+.step-circle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  border: 3px solid #cbd5e1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 0.5rem auto;
+  font-size: 1.15rem;
+  color: #64748b;
+  transition: all 0.3s ease;
+}
+
+.step-item.active .step-circle {
+  border-color: var(--eco-primary);
+  background-color: var(--eco-primary);
+  color: #ffffff;
+  box-shadow: 0 0 0 5px rgba(25, 135, 84, 0.2);
+}
+
+.step-item.completed .step-circle {
+  border-color: var(--eco-primary);
+  background-color: #ffffff;
+  color: var(--eco-primary);
+}
+
+.step-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+.step-item.active .step-title {
+  color: var(--eco-primary-dark);
+}
+
+/* Category Cards in Guidance */
+.guideline-card {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--eco-border);
+  background: #ffffff;
+}
+
+.guideline-header {
+  padding: 1.25rem;
+  background: linear-gradient(90deg, #f0fdf4 0%, #ffffff 100%);
+  border-bottom: 1px solid #dcfce7;
+}
+
+.do-dont-box {
+  border-radius: 8px;
+  padding: 1rem;
+  font-size: 0.92rem;
+}
+
+.do-box {
+  background-color: #f0fdf4;
+  border-left: 4px solid var(--eco-primary);
+}
+
+.dont-box {
+  background-color: #fef2f2;
+  border-left: 4px solid #ef4444;
+}
+
+/* Printable Receipt Styling */
+.receipt-wrapper {
+  background: #ffffff;
+  border: 2px dashed #94a3b8;
+  border-radius: 12px;
+  padding: 2.5rem;
+  max-width: 800px;
+  margin: 0 auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.receipt-watermark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-30deg);
+  font-size: 4rem;
+  font-weight: 900;
+  color: rgba(25, 135, 84, 0.06);
+  pointer-events: none;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+@media print {
+  body {
+    background: #ffffff !important;
+  }
+  .navbar-eco, .academic-notice-bar, footer, .no-print, .btn-print {
+    display: none !important;
+  }
+  .receipt-wrapper {
+    border: 1px solid #000000 !important;
+    box-shadow: none !important;
+    padding: 1rem !important;
+    max-width: 100% !important;
+  }
+  .container {
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+}
+
+/* Quiz Card Styling */
+.quiz-option {
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 0.9rem 1.25rem;
+  margin-bottom: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.quiz-option:hover {
+  border-color: #86efac;
+  background-color: #f0fdf4;
+}
+
+.quiz-option.selected {
+  border-color: var(--eco-primary);
+  background-color: #d1e7dd;
+  font-weight: 600;
+}
+
+.quiz-option.correct {
+  border-color: #198754;
+  background-color: #d1e7dd;
+  color: #0f5132;
+}
+
+.quiz-option.incorrect {
+  border-color: #dc3545;
+  background-color: #f8d7da;
+  color: #842029;
+}
+
+/* Footer */
+.footer-eco {
+  background: #0f172a;
+  color: #94a3b8;
+  padding: 3rem 0 1.5rem 0;
+  margin-top: 4rem;
+  border-top: 4px solid var(--eco-primary);
+}
+
+.footer-title {
+  color: #f8fafc;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.footer-link {
+  color: #94a3b8;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  display: inline-block;
+  margin-bottom: 0.5rem;
+}
+
+.footer-link:hover {
+  color: var(--eco-accent);
+}
+

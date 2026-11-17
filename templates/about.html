@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+
+{% block title %}About Us - E-Waste Collection Drive & Public Awareness{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <!-- Breadcrumb -->
+  <nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{{ url_for('index') }}" class="text-success text-decoration-none">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">About Us</li>
+    </ol>
+  </nav>
+
+  <div class="row align-items-center g-5 mb-5">
+    <div class="col-lg-7">
+      <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 rounded-pill fw-bold mb-3">
+        <i class="fa-solid fa-graduation-cap me-1"></i> Academic College Project
+      </span>
+      <h1 class="fw-bold display-5 mb-3 text-dark">
+        About the E-Waste Management System
+      </h1>
+      <p class="lead text-secondary">
+        A software-based digital solution engineered for academic evaluation in Computer Science & Environmental Science (Course Code: BCSP508 - CSE).
+      </p>
+      <p class="text-muted">
+        The exponential proliferation of consumer electronic devices has turned electrical and electronic waste into the world's fastest-growing municipal waste stream. When discarded casually with regular household trash, toxic heavy metals such as lead, mercury, and cadmium contaminate groundwater and soil. This application addresses this challenge by providing citizens with transparent recycling pathways and educating the community on scientific electronic disposal.
+      </p>
+    </div>
+
+    <div class="col-lg-5">
+      <div class="card card-eco border-success border-2 p-4 bg-white">
+        <h5 class="fw-bold text-success mb-3">
+          <i class="fa-solid fa-circle-exclamation me-2"></i>Academic Scope Notice
+        </h5>
+        <p class="small text-secondary mb-3">
+          <strong>Notice for Evaluators and Visitors:</strong> This application is a <strong>purely software-based academic project prototype</strong>.
+        </p>
+        <ul class="small text-secondary ps-3 mb-3">
+          <li>Does NOT require physical IoT devices, microcontrollers, or physical sensors.</li>
+          <li>Does NOT use physical smart bins or automated weighing hardware.</li>
+          <li>Does NOT conduct actual physical transport or physical electronic waste pickup.</li>
+          <li>All registration, collection requests, status updates, tracking, and receipts are handled <strong>digitally and software-simulated</strong> for demonstration.</li>
+        </ul>
+        <div class="bg-success-subtle p-2 rounded text-success small text-center fw-semibold">
+          Department of Computer Science & Engineering
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Project Objectives Section -->
+  <div class="row g-4 mb-5">
+    <div class="col-12">
+      <div class="p-4 bg-white rounded-3 shadow-sm border">
+        <h3 class="fw-bold text-dark mb-4">
+          <i class="fa-solid fa-bullseye text-danger me-2"></i>Project Objectives & Scope
+        </h3>
+        <div class="row g-4">
+          <div class="col-md-4">
+            <div class="border-start border-success border-4 ps-3">
+              <h5 class="fw-bold">Objective 1: User Platform</h5>
+              <p class="small text-muted mb-0">
+                To build an intuitive, secure web portal where users can register electronic waste details, upload photos, specify conditions, and digitally submit collection requests with unique tracking codes.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="border-start border-primary border-4 ps-3">
+              <h5 class="fw-bold">Objective 2: Authorized Centres & Guidance</h5>
+              <p class="small text-muted mb-0">
+                To curate authentic, officially verified information from statutory pollution boards (CPCB, KSPCB), guide citizens on safe pre-disposal storage, data sanitization, and provide Google Maps directions.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="border-start border-warning border-4 ps-3">
+              <h5 class="fw-bold">Objective 3: Administrative Dashboard</h5>
+              <p class="small text-muted mb-0">
+                To empower administrators with data-driven analytics via Chart.js, workflow approval controls for collection requests, inventory filtering, and full management over authorized recycling centre listings.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Technical Stack Overview -->
+  <div class="row g-4 mb-5">
+    <div class="col-12">
+      <h3 class="fw-bold text-dark mb-4">
+        <i class="fa-solid fa-layer-group text-primary me-2"></i>Technology Stack Architecture
+      </h3>
+    </div>
+
+    <div class="col-md-3 col-6">
+      <div class="card card-eco text-center p-3 h-100">
+        <i class="fa-brands fa-python fs-1 text-primary mb-2"></i>
+        <h6 class="fw-bold">Python Flask</h6>
+        <p class="small text-muted mb-0">Lightweight, WSGI compliant microframework powering RESTful routing, session auth, and business logic.</p>
+      </div>
+    </div>
+
+    <div class="col-md-3 col-6">
+      <div class="card card-eco text-center p-3 h-100">
+        <i class="fa-solid fa-database fs-1 text-info mb-2"></i>
+        <h6 class="fw-bold">MySQL 8.0 & PyMySQL</h6>
+        <p class="small text-muted mb-0">Relational database storing user credentials, e-waste inventories, verified centres, and request workflows.</p>
+      </div>
+    </div>
+
+    <div class="col-md-3 col-6">
+      <div class="card card-eco text-center p-3 h-100">
+        <i class="fa-brands fa-bootstrap fs-1 text-purple mb-2" style="color: #6f42c1;"></i>
+        <h6 class="fw-bold">Bootstrap 5</h6>
+        <p class="small text-muted mb-0">Modern, fully responsive frontend grid and component framework with mobile-first UI design.</p>
+      </div>
+    </div>
+
+    <div class="col-md-3 col-6">
+      <div class="card card-eco text-center p-3 h-100">
+        <i class="fa-solid fa-chart-pie fs-1 text-success mb-2"></i>
+        <h6 class="fw-bold">Chart.js & Font Awesome</h6>
+        <p class="small text-muted mb-0">Interactive visual charts for category statistics and clean vector iconography across all modules.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Data Authenticity Commitment -->
+  <div class="alert alert-info p-4 border-info-subtle rounded-3">
+    <div class="d-flex align-items-start gap-3">
+      <i class="fa-solid fa-shield-check fs-2 text-info mt-1"></i>
+      <div>
+        <h5 class="fw-bold mb-1">Commitment to Official Data Integrity</h5>
+        <p class="small mb-0">
+          In strict compliance with academic standards, all authorized recycling centres featured in this portal are sourced directly from official public directories of the <strong>Central Pollution Control Board (CPCB)</strong> and the <strong>Karnataka State Pollution Control Board (KSPCB)</strong> under the <em>E-Waste (Management) Rules</em>. Any mock demonstration data is unambiguously marked with a "Demonstration Data" badge.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+

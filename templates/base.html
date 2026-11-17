@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}E-Waste Collection Drive & Public Awareness{% endblock %} - Eco-Drive Portal</title>
+  
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- Font Awesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Custom Style CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+  <!-- Primary Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-eco sticky-top">
+    <div class="container">
+      <a class="navbar-brand navbar-brand-eco" href="{{ url_for('index') }}">
+        <i class="fa-solid fa-recycle"></i>
+        <span>Eco<span class="text-success">Drive</span> Portal</span>
+      </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarMain">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link {% if request.endpoint == 'index' %}active{% endif %}" href="{{ url_for('index') }}">
+              <i class="fa-solid fa-house me-1"></i> Home
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if request.endpoint == 'about' %}active{% endif %}" href="{{ url_for('about') }}">
+              <i class="fa-solid fa-circle-info me-1"></i> About Us
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if request.endpoint == 'centres' %}active{% endif %}" href="{{ url_for('centres') }}">
+              <i class="fa-solid fa-location-dot me-1 text-danger"></i> Collection Centres
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if request.endpoint == 'guidelines' %}active{% endif %}" href="{{ url_for('guidelines') }}">
+              <i class="fa-solid fa-book-open me-1 text-primary"></i> Disposal Guidance
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if request.endpoint in ['awareness', 'quiz'] %}active{% endif %}" href="{{ url_for('awareness') }}">
+              <i class="fa-solid fa-leaf me-1 text-success"></i> Awareness & Quiz
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if request.endpoint == 'track_request' %}active{% endif %}" href="{{ url_for('track_request') }}">
+              <i class="fa-solid fa-magnifying-glass me-1"></i> Track Request
+            </a>
+          </li>
+        </ul>
+
+        <!-- User / Admin Auth States -->
+        <ul class="navbar-nav ms-auto align-items-lg-center">
+          {% if session.get('user_id') %}
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle text-success fw-bold" href="#" id="userMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa-solid fa-circle-user me-1 fs-5 align-middle"></i> {{ session.get('user_name', 'My Account') }}
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end shadow border-0" aria-labelledby="userMenu">
+                <li><a class="dropdown-item" href="{{ url_for('user_dashboard') }}"><i class="fa-solid fa-gauge-high me-2 text-success"></i> My Dashboard</a></li>
+                <li><a class="dropdown-item" href="{{ url_for('register_ewaste') }}"><i class="fa-solid fa-plus-circle me-2 text-primary"></i> Register E-Waste</a></li>
+                <li><a class="dropdown-item" href="{{ url_for('my_ewaste_items') }}"><i class="fa-solid fa-box-archive me-2 text-info"></i> My E-Waste Items</a></li>
+                <li><a class="dropdown-item" href="{{ url_for('submit_request') }}"><i class="fa-solid fa-truck-pickup me-2 text-warning"></i> Submit Collection Request</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="{{ url_for('profile') }}"><i class="fa-solid fa-id-badge me-2 text-secondary"></i> My Profile</a></li>
+                <li><a class="dropdown-item text-danger" href="{{ url_for('logout') }}"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i> Log Out</a></li>
+              </ul>
+            </li>
+          {% elif session.get('admin_id') %}
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle text-primary fw-bold" href="#" id="adminMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa-solid fa-shield-halved me-1 fs-5 align-middle text-primary"></i> Admin: {{ session.get('admin_name', 'Administrator') }}
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end shadow border-0" aria-labelledby="adminMenu">
+                <li><a class="dropdown-item" href="{{ url_for('admin_dashboard') }}"><i class="fa-solid fa-chart-pie me-2 text-primary"></i> Admin Dashboard</a></li>
+                <li><a class="dropdown-item" href="{{ url_for('admin_requests') }}"><i class="fa-solid fa-clipboard-list me-2 text-warning"></i> Collection Requests</a></li>
+                <li><a class="dropdown-item" href="{{ url_for('admin_items') }}"><i class="fa-solid fa-boxes-stacked me-2 text-success"></i> E-Waste Inventory</a></li>
+                <li><a class="dropdown-item" href="{{ url_for('admin_users') }}"><i class="fa-solid fa-users me-2 text-info"></i> Registered Users</a></li>
+                <li><a class="dropdown-item" href="{{ url_for('admin_centres') }}"><i class="fa-solid fa-building-circle-check me-2 text-danger"></i> Recycling Centres</a></li>
+                <li><a class="dropdown-item" href="{{ url_for('admin_guidelines') }}"><i class="fa-solid fa-book me-2 text-secondary"></i> Guidance Content</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item text-danger" href="{{ url_for('admin_logout') }}"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i> Admin Logout</a></li>
+              </ul>
+            </li>
+          {% else %}
+            <li class="nav-item me-1">
+              <a class="nav-link" href="{{ url_for('login') }}">
+                <i class="fa-solid fa-arrow-right-to-bracket me-1"></i> User Login
+              </a>
+            </li>
+            <li class="nav-item me-2">
+              <a class="btn btn-sm btn-success rounded-pill px-3" href="{{ url_for('register') }}">
+                <i class="fa-solid fa-user-plus me-1"></i> Register
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="btn btn-sm btn-outline-secondary rounded-pill px-3" href="{{ url_for('admin_login') }}" title="Administrator Access">
+                <i class="fa-solid fa-lock me-1"></i> Admin
+              </a>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Flash Messages Alert Bar -->
+  <div class="container mt-3">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible fade show shadow-sm" role="alert">
+            {% if category == 'success' %}
+              <i class="fa-solid fa-circle-check me-2"></i>
+            {% elif category == 'danger' %}
+              <i class="fa-solid fa-circle-exclamation me-2"></i>
+            {% elif category == 'warning' %}
+              <i class="fa-solid fa-triangle-exclamation me-2"></i>
+            {% else %}
+              <i class="fa-solid fa-circle-info me-2"></i>
+            {% endif %}
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+  </div>
+
+  <!-- Main Content Block -->
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Eco-Themed Footer -->
+  <footer class="footer-eco">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-lg-4 col-md-6">
+          <h5 class="footer-title">
+            <i class="fa-solid fa-recycle text-success me-2"></i>E-Waste Management System
+          </h5>
+          <p class="small text-secondary mb-3">
+            A software-based academic project advancing environmental sustainability, public awareness, and responsible e-waste channelization to authorized recyclers.
+          </p>
+          <div class="p-2 rounded bg-dark border border-secondary text-light small">
+            <i class="fa-solid fa-triangle-exclamation text-warning me-1"></i>
+            <strong>Notice:</strong> This is an academic simulation project. Physical electronic waste pickup is not performed in reality.
+          </div>
+        </div>
+
+        <div class="col-lg-2 col-md-6">
+          <h6 class="footer-title">Quick Links</h6>
+          <ul class="list-unstyled">
+            <li><a href="{{ url_for('index') }}" class="footer-link">Home</a></li>
+            <li><a href="{{ url_for('about') }}" class="footer-link">About Project</a></li>
+            <li><a href="{{ url_for('centres') }}" class="footer-link">Recycling Centres</a></li>
+            <li><a href="{{ url_for('guidelines') }}" class="footer-link">Disposal Guidance</a></li>
+            <li><a href="{{ url_for('awareness') }}" class="footer-link">Awareness Articles</a></li>
+            <li><a href="{{ url_for('quiz') }}" class="footer-link">Eco Quiz</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+          <h6 class="footer-title">Official Sources</h6>
+          <ul class="list-unstyled small">
+            <li class="mb-2">
+              <a href="https://cpcb.nic.in/e-waste/" target="_blank" rel="noopener" class="footer-link">
+                <i class="fa-solid fa-arrow-up-right-from-square me-1"></i> Central Pollution Control Board (CPCB)
+              </a>
+            </li>
+            <li class="mb-2">
+              <a href="https://kspcb.karnataka.gov.in/" target="_blank" rel="noopener" class="footer-link">
+                <i class="fa-solid fa-arrow-up-right-from-square me-1"></i> Karnataka SPCB (KSPCB)
+              </a>
+            </li>
+            <li class="mb-2">
+              <a href="https://moef.gov.in/" target="_blank" rel="noopener" class="footer-link">
+                <i class="fa-solid fa-arrow-up-right-from-square me-1"></i> MoEFCC (E-Waste Rules, 2022)
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+          <h6 class="footer-title">Project Details</h6>
+          <p class="small text-secondary mb-1"><strong>Course:</strong> BCSP508 - CSE Final Year Project</p>
+          <p class="small text-secondary mb-1"><strong>Domain:</strong> Environmental Science & Web Engineering</p>
+          <p class="small text-secondary mb-2"><strong>Database:</strong> MySQL 8.0 & Flask Backend</p>
+          <div class="mt-2">
+            <a href="{{ url_for('admin_login') }}" class="btn btn-sm btn-outline-light">
+              <i class="fa-solid fa-user-shield me-1"></i> Administrative Portal
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <hr class="border-secondary my-4">
+
+      <div class="d-flex flex-wrap justify-content-between align-items-center text-secondary small">
+        <div>
+          &copy; {{ current_year }} E-Waste Collection Drive & Public Awareness Management System. Academic Prototype.
+        </div>
+        <div>
+          <span class="badge bg-success-subtle text-success border border-success-subtle me-2">Bootstrap 5</span>
+          <span class="badge bg-info-subtle text-info border border-info-subtle me-2">Flask</span>
+          <span class="badge bg-primary-subtle text-primary border border-primary-subtle">MySQL</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap 5 JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Chart.js 4 -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+
+  <!-- Main Application JS -->
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+  {% block extra_scripts %}{% endblock %}
+</body>
+</html>
+

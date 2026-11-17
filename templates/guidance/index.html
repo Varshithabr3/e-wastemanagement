@@ -1,0 +1,185 @@
+{% extends 'base.html' %}
+
+{% block title %}Proper E-Waste Disposal Guidelines - Objective 2{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <!-- Breadcrumb -->
+  <nav aria-label="breadcrumb" class="mb-3">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{{ url_for('index') }}" class="text-success text-decoration-none">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Disposal Guidance</li>
+    </ol>
+  </nav>
+
+  <!-- Module Header -->
+  <div class="row align-items-center mb-4 g-3">
+    <div class="col-lg-8">
+      <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-2 rounded-pill fw-bold mb-2">
+        <i class="fa-solid fa-book-open me-1"></i> Objective 2: Scientific Guidance
+      </span>
+      <h2 class="fw-bold mb-1">Proper E-Waste Disposal & Safe Storage Guidelines</h2>
+      <p class="text-secondary small mb-0">
+        Scientific, step-by-step instructions for citizens and institutions to responsibly prepare electronic devices for recycling, prevent catastrophic fires, and protect personal data.
+      </p>
+    </div>
+    <div class="col-lg-4 text-lg-end">
+      <a href="{{ url_for('centres') }}" class="btn btn-outline-success">
+        <i class="fa-solid fa-building-circle-check me-1"></i> Authorized Centres Directory
+      </a>
+    </div>
+  </div>
+
+  <!-- Key Principles Banner -->
+  <div class="row g-3 mb-5">
+    <div class="col-md-4">
+      <div class="card card-eco p-3 h-100 bg-white border-start border-danger border-4">
+        <h6 class="fw-bold text-danger mb-1"><i class="fa-solid fa-ban me-1"></i> Never in Household Dustbins</h6>
+        <p class="small text-muted mb-0">
+          Electronic items in regular landfills produce toxic leachate that contaminates aquifers and sparks high-temperature lithium fires in compaction garbage trucks.
+        </p>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card card-eco p-3 h-100 bg-white border-start border-warning border-4">
+        <h6 class="fw-bold text-warning mb-1"><i class="fa-solid fa-box-archive me-1"></i> Safe Pre-Disposal Storage</h6>
+        <p class="small text-muted mb-0">
+          Store unused gadgets in a cool, dry area away from direct sunlight. Always tape battery terminals with clear electrical tape to prevent short circuits.
+        </p>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card card-eco p-3 h-100 bg-white border-start border-success border-4">
+        <h6 class="fw-bold text-success mb-1"><i class="fa-solid fa-recycle me-1"></i> 3R Hierarchy (Reuse & Recycle)</h6>
+        <p class="small text-muted mb-0">
+          Working devices should first be refurbished or donated. Non-functional electronics must be channeled strictly to registered CPCB/KSPCB hydrometallurgical recyclers.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Category-Wise Disposal Directives -->
+  <div class="row g-4 mb-5">
+    {% for guide in guidelines %}
+      <div class="col-12" id="{{ guide.category|replace(' ', '-') }}">
+        <div class="card card-eco shadow-sm bg-white overflow-hidden">
+          <!-- Card Header with Icon -->
+          <div class="guideline-header d-flex flex-wrap justify-content-between align-items-center">
+            <div class="d-flex align-items-center gap-3">
+              <div class="p-3 bg-white text-success rounded-circle shadow-sm border">
+                <i class="fa-solid {{ guide.icon_class }} fs-3"></i>
+              </div>
+              <div>
+                <span class="badge bg-success-subtle text-success border border-success-subtle mb-1">{{ guide.category }}</span>
+                <h4 class="fw-bold text-dark mb-0">{{ guide.title }}</h4>
+              </div>
+            </div>
+            <div>
+              {% if session.get('user_id') %}
+                <a href="{{ url_for('register_ewaste') }}" class="btn btn-sm btn-success">
+                  <i class="fa-solid fa-plus me-1"></i> Register This Item
+                </a>
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="p-4">
+            <!-- Summary -->
+            <p class="lead text-secondary fs-6 mb-4">
+              {{ guide.summary }}
+            </p>
+
+            <div class="row g-4 mb-4">
+              <!-- Step by Step -->
+              <div class="col-lg-6">
+                <div class="p-3 rounded-3 bg-light border h-100">
+                  <h6 class="fw-bold text-dark mb-3">
+                    <i class="fa-solid fa-list-ol text-primary me-2"></i> Step-by-Step Disposal Instructions
+                  </h6>
+                  <div class="small text-secondary" style="white-space: pre-line; line-height: 1.6;">
+                    {{ guide.step_by_step }}
+                  </div>
+                </div>
+              </div>
+
+              <!-- Do's and Don'ts -->
+              <div class="col-lg-6">
+                <div class="p-3 rounded-3 bg-light border h-100">
+                  <h6 class="fw-bold text-dark mb-3">
+                    <i class="fa-solid fa-scale-balanced text-warning me-2"></i> Critical Do's and Don'ts
+                  </h6>
+                  <div class="small" style="white-space: pre-line; line-height: 1.6;">
+                    {{ guide.dos_and_donts }}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Hazards Prevented -->
+            {% if guide.hazards_prevented %}
+              <div class="alert alert-success border-success-subtle py-2 px-3 mb-0 small">
+                <i class="fa-solid fa-shield-halved text-success me-2"></i>
+                <strong>Environmental & Safety Hazards Prevented:</strong> {{ guide.hazards_prevented }}
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  <!-- Interactive Citizen Disposal Checklist -->
+  <div class="card card-eco shadow-sm p-4 bg-white border-primary-subtle">
+    <div class="d-flex align-items-center gap-3 mb-3">
+      <div class="p-3 bg-primary-subtle text-primary rounded-circle">
+        <i class="fa-solid fa-clipboard-check fs-2"></i>
+      </div>
+      <div>
+        <h4 class="fw-bold mb-1">Pre-Disposal Citizen Checklist</h4>
+        <p class="text-muted small mb-0">Check off each requirement before handing e-waste to any collection partner:</p>
+      </div>
+    </div>
+
+    <div class="row g-2 small mt-2">
+      <div class="col-md-6">
+        <div class="form-check p-2 bg-light rounded border">
+          <input class="form-check-input ms-1 me-2" type="checkbox" id="chk1">
+          <label class="form-check-label" for="chk1">
+            <strong>Data Wiped:</strong> Factory data reset performed; hard disks, SD cards, and SIM cards removed.
+          </label>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="form-check p-2 bg-light rounded border">
+          <input class="form-check-input ms-1 me-2" type="checkbox" id="chk2">
+          <label class="form-check-label" for="chk2">
+            <strong>Terminals Insulated:</strong> Clear electrical tape applied over exposed battery contact terminals.
+          </label>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="form-check p-2 bg-light rounded border">
+          <input class="form-check-input ms-1 me-2" type="checkbox" id="chk3">
+          <label class="form-check-label" for="chk3">
+            <strong>Glass Secured:</strong> Cracked phone screens or monitor displays taped to prevent glass splinters.
+          </label>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="form-check p-2 bg-light rounded border">
+          <input class="form-check-input ms-1 me-2" type="checkbox" id="chk4">
+          <label class="form-check-label" for="chk4">
+            <strong>Cables Consolidated:</strong> Charging bricks, adapters, and power cables bundled loosely.
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+

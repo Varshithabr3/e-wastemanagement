@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+
+{% block title %}Track Collection Request - E-Waste Portal{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="text-center mb-4">
+    <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-2 rounded-pill fw-bold mb-2">
+      Status Tracking Engine
+    </span>
+    <h2 class="fw-bold">Track E-Waste Collection Request</h2>
+    <p class="text-muted small max-w-600 mx-auto" style="max-width: 550px;">
+      Enter your unique collection request ID to view verification milestones, assigned recyclers, and live status updates.
+    </p>
+
+    <!-- Search Form -->
+    <div class="card card-eco p-3 max-w-600 mx-auto bg-white shadow-sm mt-3" style="max-width: 550px;">
+      <form action="{{ url_for('track_request') }}" method="GET" class="d-flex gap-2">
+        <div class="input-group">
+          <span class="input-group-text bg-light"><i class="fa-solid fa-barcode text-muted"></i></span>
+          <input type="text" name="code" class="form-control" placeholder="Enter Request ID (e.g. EWC-202611-B48A)" value="{{ searched_code or '' }}" required autofocus>
+        </div>
+        <button type="submit" class="btn btn-primary px-4 fw-semibold text-nowrap">
+          <i class="fa-solid fa-magnifying-glass me-1"></i> Track
+        </button>
+      </form>
+    </div>
+  </div>
+
+  {% if req %}
+    <!-- Result Card -->
+    <div class="card card-eco shadow-sm p-4 bg-white max-w-800 mx-auto mt-4" style="max-width: 850px;">
+      <!-- Header Info -->
+      <div class="d-flex flex-wrap justify-content-between align-items-center border-bottom pb-3 mb-4 gap-2">
+        <div>
+          <span class="text-muted small text-uppercase fw-bold">Collection Request</span>
+          <h4 class="fw-bold text-primary font-monospace mb-0">{{ req.request_code }}</h4>
+        </div>
+        <div class="text-end">
+          {% if req.status == 'Pending' %}
+            <span class="badge-status badge-status-pending fs-6"><i class="fa-solid fa-clock me-1"></i> Status: Pending</span>
+          {% elif req.status == 'Approved' %}
+            <span class="badge-status badge-status-approved fs-6"><i class="fa-solid fa-circle-check me-1"></i> Status: Approved</span>
+          {% elif req.status == 'In Progress' %}
+            <span class="badge-status badge-status-in-progress fs-6"><i class="fa-solid fa-spinner fa-spin me-1"></i> Status: In Progress</span>
+          {% elif req.status == 'Completed' %}
+            <span class="badge-status badge-status-completed fs-6"><i class="fa-solid fa-award me-1"></i> Status: Completed</span>
+          {% else %}
+            <span class="badge-status badge-status-rejected fs-6"><i class="fa-solid fa-circle-xmark me-1"></i> Status: Rejected</span>
+          {% endif %}
+          <div class="small text-muted mt-1">Submitted on: {{ req.created_at.strftime('%Y-%m-%d') }}</div>
+        </div>
+      </div>
+
+      <!-- Academic Notice Banner -->
+      <div class="alert alert-warning border-warning-subtle small mb-4">
+        <i class="fa-solid fa-triangle-exclamation me-1"></i>
+        <strong>Academic Software Prototype:</strong> Actual physical pickup or vehicle movement is simulated digitally for educational evaluation.
+      </div>
+
+      <!-- Visual Timeline Stepper -->
+      {% if req.status != 'Rejected' %}
+        <div class="tracking-stepper mb-5">
+          <!-- Step 1: Submitted -->
+          <div class="step-item {% if req.status in ['Pending', 'Approved', 'In Progress', 'Completed'] %}completed{% endif %}">
+            <div class="step-circle">
+              <i class="fa-solid fa-file-circle-check"></i>
+            </div>
+            <div class="step-title">1. Submitted</div>
+            <small class="text-muted d-block" style="font-size: 0.72rem;">{{ req.created_at.strftime('%b %d') }}</small>
+          </div>
+
+          <!-- Step 2: Approved -->
+          <div class="step-item {% if req.status in ['Approved', 'In Progress', 'Completed'] %}completed active{% elif req.status == 'Pending' %}pending{% endif %}">
+            <div class="step-circle">
+              <i class="fa-solid fa-clipboard-check"></i>
+            </div>
+            <div class="step-title">2. Approved</div>
+            <small class="text-muted d-block" style="font-size: 0.72rem;">Admin Verification</small>
+          </div>
+
+          <!-- Step 3: In Progress -->
+          <div class="step-item {% if req.status in ['In Progress', 'Completed'] %}completed active{% endif %}">
+            <div class="step-circle">
+              <i class="fa-solid fa-truck-fast"></i>
+            </div>
+            <div class="step-title">3. In Progress</div>
+            <small class="text-muted d-block" style="font-size: 0.72rem;">Collection Route</small>
+          </div>
+
+          <!-- Step 4: Completed -->
+          <div class="step-item {% if req.status == 'Completed' %}completed active{% endif %}">
+            <div class="step-circle">
+              <i class="fa-solid fa-seedling"></i>
+            </div>
+            <div class="step-title">4. Recycled</div>
+            <small class="text-muted d-block" style="font-size: 0.72rem;">Zero Landfill</small>
+          </div>
+        </div>
+      {% else %}
+        <div class="alert alert-danger mb-4">
+          <i class="fa-solid fa-circle-xmark me-2"></i>
+          <strong>Request Rejected:</strong> This collection request was marked as rejected by the administration. Please contact support or check the administrator remarks below.
+        </div>
+      {% endif %}
+
+      <!-- Request Details Grid -->
+      <div class="row g-3 mb-4">
+        <div class="col-md-6">
+          <div class="p-3 bg-light rounded border h-100 small">
+            <h6 class="fw-bold mb-2 text-dark"><i class="fa-solid fa-location-dot text-danger me-1"></i> Pickup Location</h6>
+            <p class="mb-1"><strong>Address:</strong> {{ req.pickup_address }}</p>
+            <p class="mb-1"><strong>City & PIN:</strong> {{ req.city }} - {{ req.pincode }}</p>
+            <p class="mb-0"><strong>Preference:</strong> {{ req.preference_type }}</p>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="p-3 bg-light rounded border h-100 small">
+            <h6 class="fw-bold mb-2 text-dark"><i class="fa-solid fa-calendar-check text-success me-1"></i> Schedule & Logistics</h6>
+            <p class="mb-1"><strong>Preferred Date:</strong> {{ req.preferred_date }}</p>
+            <p class="mb-1"><strong>Citizen Contact:</strong> {{ req.user.full_name }} ({{ req.user.phone }})</p>
+            <p class="mb-0"><strong>Admin Remarks:</strong> <span class="text-secondary">{{ req.admin_notes or 'Processing request' }}</span></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Items in this request -->
+      <h6 class="fw-bold mb-2"><i class="fa-solid fa-boxes-stacked text-primary me-1"></i> Included E-Waste Items ({{ req.items|length }})</h6>
+      <div class="table-responsive mb-4">
+        <table class="table table-sm table-bordered align-middle small">
+          <thead class="table-light">
+            <tr>
+              <th>Item Name</th>
+              <th>Category</th>
+              <th>Condition</th>
+              <th class="text-center">Qty</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in req.items %}
+              <tr>
+                <td class="fw-bold">{{ item.item_name }}</td>
+                <td><span class="badge bg-success-subtle text-success">{{ item.category }}</span></td>
+                <td>{{ item.item_condition }}</td>
+                <td class="text-center">{{ item.quantity }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Receipt Button -->
+      <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+        <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">
+          <i class="fa-solid fa-house me-1"></i> Return Home
+        </a>
+        <a href="{{ url_for('request_receipt', request_code=req.request_code) }}" class="btn btn-success">
+          <i class="fa-solid fa-file-invoice me-1"></i> View Official Receipt
+        </a>
+      </div>
+    </div>
+  {% elif searched_code %}
+    <div class="text-center py-5">
+      <i class="fa-solid fa-magnifying-glass-chart fs-1 text-muted mb-3"></i>
+      <h5 class="fw-bold">No Matching Request Found</h5>
+      <p class="text-muted small">We could not find any collection request matching "<strong>{{ searched_code }}</strong>". Please ensure you entered the exact Request ID.</p>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}
+

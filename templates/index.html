@@ -1,0 +1,324 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - E-Waste Collection Drive & Public Awareness{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-eco">
+  <div class="container position-relative" style="z-index: 2;">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-7">
+        <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 rounded-pill fw-bold mb-3">
+          <i class="fa-solid fa-seedling me-1"></i> Sustainable Digital Platform
+        </span>
+        <h1 class="hero-title display-5 mb-3">
+          Smart E-Waste Collection Drive & Public Awareness
+        </h1>
+        <p class="hero-subtitle mb-4">
+          A dedicated digital management platform designed to prevent hazardous electronic disposal, guide citizens with scientific recycling methods, and connect communities with authorized CPCB & KSPCB collection centres.
+        </p>
+
+        <div class="d-flex flex-wrap gap-3 mb-4">
+          {% if session.get('user_id') %}
+            <a href="{{ url_for('register_ewaste') }}" class="btn btn-success btn-lg px-4 shadow-sm">
+              <i class="fa-solid fa-plus-circle me-2"></i> Register E-Waste
+            </a>
+            <a href="{{ url_for('user_dashboard') }}" class="btn btn-outline-success btn-lg px-4">
+              <i class="fa-solid fa-gauge-high me-2"></i> View Dashboard
+            </a>
+          {% else %}
+            <a href="{{ url_for('register') }}" class="btn btn-success btn-lg px-4 shadow-sm">
+              <i class="fa-solid fa-user-plus me-2"></i> Join Collection Drive
+            </a>
+            <a href="{{ url_for('login') }}" class="btn btn-outline-success btn-lg px-4">
+              <i class="fa-solid fa-arrow-right-to-bracket me-2"></i> User Login
+            </a>
+          {% endif %}
+          <a href="{{ url_for('centres') }}" class="btn btn-outline-primary btn-lg px-4">
+            <i class="fa-solid fa-map-location-dot me-2"></i> Authorized Centres
+          </a>
+        </div>
+
+        <!-- Quick Track Box -->
+        <div class="card border-0 shadow-sm p-3 bg-white rounded-3" style="max-width: 500px;">
+          <form action="{{ url_for('track_request') }}" method="GET" class="d-flex gap-2">
+            <input type="text" name="code" class="form-control" placeholder="Enter Request ID (e.g. EWC-202611-B48A)" required>
+            <button type="submit" class="btn btn-primary px-3 text-nowrap">
+              <i class="fa-solid fa-magnifying-glass me-1"></i> Track
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <div class="col-lg-5 text-center">
+        <div class="card card-eco p-4 text-start bg-white">
+          <div class="d-flex align-items-center gap-3 mb-3">
+            <div class="p-3 bg-success-subtle text-success rounded-circle">
+              <i class="fa-solid fa-earth-americas fs-2"></i>
+            </div>
+            <div>
+              <h5 class="fw-bold mb-0">Project Mission</h5>
+              <small class="text-muted">Zero-Landfill Electronic Future</small>
+            </div>
+          </div>
+          <p class="text-secondary small mb-3">
+            Electronics contain hazardous toxins (lead, cadmium, mercury) and valuable precious metals (gold, copper). Our portal promotes the circular economy through certified government-authorized channels.
+          </p>
+
+          <div class="border-top pt-3">
+            <div class="d-flex justify-content-between mb-2 small">
+              <span class="text-muted"><i class="fa-solid fa-check-double text-success me-1"></i> CPCB & KSPCB Directory:</span>
+              <span class="fw-bold text-success">Verified</span>
+            </div>
+            <div class="d-flex justify-content-between mb-2 small">
+              <span class="text-muted"><i class="fa-solid fa-shield-halved text-primary me-1"></i> Data Privacy Protocol:</span>
+              <span class="fw-bold text-primary">Cryptographic Wipe</span>
+            </div>
+            <div class="d-flex justify-content-between small">
+              <span class="text-muted"><i class="fa-solid fa-graduation-cap text-warning me-1"></i> Academic Scope:</span>
+              <span class="fw-bold text-secondary">Digital Prototype</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Live Impact Metric Counters -->
+<section class="py-5 bg-white border-bottom">
+  <div class="container">
+    <div class="row g-4 text-center">
+      <div class="col-md-3 col-6">
+        <div class="stat-box">
+          <div>
+            <div class="stat-number text-success counter-anim" data-target="{{ total_users }}">{{ total_users }}</div>
+            <div class="stat-label">Registered Users</div>
+          </div>
+          <i class="fa-solid fa-users stat-icon text-success"></i>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="stat-box blue">
+          <div>
+            <div class="stat-number text-primary counter-anim" data-target="{{ total_items }}">{{ total_items }}</div>
+            <div class="stat-label">E-Waste Items Logged</div>
+          </div>
+          <i class="fa-solid fa-boxes-stacked stat-icon text-primary"></i>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="stat-box teal">
+          <div>
+            <div class="stat-number text-info counter-anim" data-target="{{ total_requests }}">{{ total_requests }}</div>
+            <div class="stat-label">Collection Drives</div>
+          </div>
+          <i class="fa-solid fa-truck-pickup stat-icon text-info"></i>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="stat-box warning">
+          <div>
+            <div class="stat-number text-warning counter-anim" data-target="{{ verified_centres }}">{{ verified_centres }}</div>
+            <div class="stat-label">Authorized Centres</div>
+          </div>
+          <i class="fa-solid fa-building-circle-check stat-icon text-warning"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Core Project Objectives -->
+<section class="py-5 bg-light">
+  <div class="container">
+    <div class="text-center mb-5">
+      <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill fw-semibold">Platform Capabilities</span>
+      <h2 class="fw-bold mt-2">Three Fundamental Project Objectives</h2>
+      <p class="text-muted">Designed in compliance with academic requirements and real-world environmental protocols.</p>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="card card-eco h-100 p-4">
+          <div class="p-3 bg-success-subtle text-success rounded-3 d-inline-block mb-3" style="width: fit-content;">
+            <i class="fa-solid fa-laptop-file fs-3"></i>
+          </div>
+          <h4 class="fw-bold">1. Digital E-Waste Registration & Requests</h4>
+          <p class="text-secondary small">
+            Citizens can catalog unwanted mobile phones, laptops, batteries, and appliances with condition notes and photos, then submit digital doorstep pickup or drop-off collection requests.
+          </p>
+          <ul class="list-unstyled small text-muted mt-auto pt-2">
+            <li><i class="fa-solid fa-check text-success me-2"></i>Multi-category inventory logging</li>
+            <li><i class="fa-solid fa-check text-success me-2"></i>Unique Trackable Request ID</li>
+            <li><i class="fa-solid fa-check text-success me-2"></i>Downloadable / Printable formal receipt</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card card-eco h-100 p-4">
+          <div class="p-3 bg-info-subtle text-info rounded-3 d-inline-block mb-3" style="width: fit-content;">
+            <i class="fa-solid fa-map-location-dot fs-3"></i>
+          </div>
+          <h4 class="fw-bold">2. Authorized Centres & Disposal Guidance</h4>
+          <p class="text-secondary small">
+            Dedicated module connecting users with verified recyclers authorized by the Central Pollution Control Board (CPCB) and Karnataka State Pollution Control Board (KSPCB).
+          </p>
+          <ul class="list-unstyled small text-muted mt-auto pt-2">
+            <li><i class="fa-solid fa-check text-info me-2"></i>Official government source citations</li>
+            <li><i class="fa-solid fa-check text-info me-2"></i>Clear verified vs demo badge distinction</li>
+            <li><i class="fa-solid fa-check text-info me-2"></i>Category-wise step-by-step disposal guides</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card card-eco h-100 p-4">
+          <div class="p-3 bg-primary-subtle text-primary rounded-3 d-inline-block mb-3" style="width: fit-content;">
+            <i class="fa-solid fa-chart-line fs-3"></i>
+          </div>
+          <h4 class="fw-bold">3. Admin Dashboard & Public Awareness</h4>
+          <p class="text-secondary small">
+            Robust administrator management portal featuring visual Chart.js analytics, request review controls, and an educational hub with interactive environmental quiz.
+          </p>
+          <ul class="list-unstyled small text-muted mt-auto pt-2">
+            <li><i class="fa-solid fa-check text-primary me-2"></i>Interactive Chart.js data visualizations</li>
+            <li><i class="fa-solid fa-check text-primary me-2"></i>Centre & guideline CRUD operations</li>
+            <li><i class="fa-solid fa-check text-primary me-2"></i>Gamified public awareness quiz with certificate</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Accepted Categories Showcase -->
+<section class="py-5 bg-white">
+  <div class="container">
+    <div class="text-center mb-5">
+      <span class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill fw-semibold">Electronic Waste Categories</span>
+      <h2 class="fw-bold mt-2">What Can You Register and Channel?</h2>
+      <p class="text-muted">Explore safety precautions and proper handling for common household electronics.</p>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-lg-3 col-md-6">
+        <div class="card card-eco text-center p-3 h-100">
+          <div class="fs-1 text-success mb-2"><i class="fa-solid fa-mobile-screen-button"></i></div>
+          <h5 class="fw-bold">Mobile Phones</h5>
+          <p class="small text-muted">Smartphones, feature phones, PDA units. High recovery of gold, silver, and copper.</p>
+          <a href="{{ url_for('guidelines', category='Mobile Phones') }}" class="btn btn-sm btn-outline-success mt-auto">Read Guide</a>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-6">
+        <div class="card card-eco text-center p-3 h-100">
+          <div class="fs-1 text-primary mb-2"><i class="fa-solid fa-laptop"></i></div>
+          <h5 class="fw-bold">Laptops & PCs</h5>
+          <p class="small text-muted">Desktops, motherboards, servers, and monitors requiring secure cryptographic storage wiping.</p>
+          <a href="{{ url_for('guidelines', category='Laptops & Computers') }}" class="btn btn-sm btn-outline-primary mt-auto">Read Guide</a>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-6">
+        <div class="card card-eco text-center p-3 h-100">
+          <div class="fs-1 text-warning mb-2"><i class="fa-solid fa-car-battery"></i></div>
+          <h5 class="fw-bold">Batteries</h5>
+          <p class="small text-muted">Lithium-ion cells, laptop batteries, lead-acid. Requires terminal insulation tape to prevent fires.</p>
+          <a href="{{ url_for('guidelines', category='Batteries') }}" class="btn btn-sm btn-outline-warning mt-auto">Read Guide</a>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-6">
+        <div class="card card-eco text-center p-3 h-100">
+          <div class="fs-1 text-info mb-2"><i class="fa-solid fa-tv"></i></div>
+          <h5 class="fw-bold">Televisions & Appliances</h5>
+          <p class="small text-muted">LED/LCD and CRT screens, microwave ovens, chargers, cables, and peripheral gear.</p>
+          <a href="{{ url_for('guidelines', category='Televisions & Other Electronics') }}" class="btn btn-sm btn-outline-info mt-auto">Read Guide</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Featured Authorized Centres Preview -->
+<section class="py-5 bg-light">
+  <div class="container">
+    <div class="d-flex flex-wrap justify-content-between align-items-end mb-4">
+      <div>
+        <span class="badge bg-danger-subtle text-danger px-3 py-2 rounded-pill fw-semibold">Objective 2 Spotlight</span>
+        <h2 class="fw-bold mt-2 mb-0">Authorized Collection & Recycling Centres</h2>
+        <p class="text-muted mb-0">Government-authorized e-waste dismantlers from CPCB & KSPCB official registries.</p>
+      </div>
+      <div>
+        <a href="{{ url_for('centres') }}" class="btn btn-outline-success">
+          View All Centres <i class="fa-solid fa-arrow-right ms-1"></i>
+        </a>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      {% for centre in recent_centres %}
+        <div class="col-md-4">
+          <div class="card card-eco h-100 p-4">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              {% if centre.is_official_verified %}
+                <span class="badge-verified-official">
+                  <i class="fa-solid fa-shield-check"></i> CPCB/KSPCB Verified
+                </span>
+              {% else %}
+                <span class="badge-verified-demo">
+                  <i class="fa-solid fa-flask"></i> Demonstration Data
+                </span>
+              {% endif %}
+              <small class="text-muted"><i class="fa-solid fa-calendar-check me-1"></i> {{ centre.last_verified_date }}</small>
+            </div>
+
+            <h5 class="fw-bold text-dark mt-2 mb-2">{{ centre.centre_name }}</h5>
+            <p class="small text-secondary mb-3">
+              <i class="fa-solid fa-location-dot text-danger me-1"></i> {{ centre.complete_address }}
+            </p>
+
+            <div class="bg-light p-2 rounded mb-3 small">
+              <strong>Accepted:</strong> {{ centre.accepted_categories[:80] }}...
+            </div>
+
+            <div class="mt-auto d-flex justify-content-between align-items-center pt-2 border-top">
+              <a href="{{ centre.directions_url }}" target="_blank" rel="noopener" class="btn btn-sm btn-outline-primary">
+                <i class="fa-solid fa-diamond-turn-right me-1"></i> Directions
+              </a>
+              {% if centre.contact_phone and centre.contact_phone != 'N/A' %}
+                <a href="tel:{{ centre.contact_phone }}" class="btn btn-sm btn-outline-success">
+                  <i class="fa-solid fa-phone me-1"></i> Call
+                </a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Quiz Call To Action -->
+<section class="py-5 text-white" style="background: linear-gradient(135deg, #0f5132 0%, #198754 100%);">
+  <div class="container text-center py-4">
+    <div class="mb-3">
+      <i class="fa-solid fa-award fs-1 text-warning"></i>
+    </div>
+    <h2 class="fw-bold display-6 mb-3">Test Your Environmental Awareness</h2>
+    <p class="lead max-w-700 mx-auto mb-4" style="max-width: 650px;">
+      How much do you know about hazardous electronic toxins, Indian E-Waste Regulations (EPR), and safe battery storage? Take our interactive quiz and earn an official Eco-Awareness Certificate!
+    </p>
+    <a href="{{ url_for('quiz') }}" class="btn btn-warning btn-lg px-5 fw-bold shadow">
+      <i class="fa-solid fa-play me-2"></i> Start Environmental Quiz Now
+    </a>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}
+

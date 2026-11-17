@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block title %}My Profile - E-Waste Collection Drive{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-7">
+      <div class="card card-eco shadow-sm p-4 bg-white">
+        <div class="d-flex align-items-center gap-3 mb-4 border-bottom pb-3">
+          <div class="p-3 bg-success-subtle text-success rounded-circle">
+            <i class="fa-solid fa-id-card fs-2"></i>
+          </div>
+          <div>
+            <h3 class="fw-bold mb-0">User Profile Management</h3>
+            <p class="text-muted small mb-0">Manage your contact information and security settings.</p>
+          </div>
+        </div>
+
+        <form action="{{ url_for('profile') }}" method="POST" class="needs-validation" novalidate>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold small">Full Name</label>
+              <input type="text" class="form-control" name="full_name" value="{{ user.full_name }}" required>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label fw-semibold small">Email Address</label>
+              <input type="email" class="form-control bg-light" value="{{ user.email }}" readonly disabled>
+              <small class="text-muted">Email is permanent.</small>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label fw-semibold small">Phone Number</label>
+              <input type="tel" class="form-control" name="phone" value="{{ user.phone }}" required>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label fw-semibold small">City</label>
+              <input type="text" class="form-control" name="city" value="{{ user.city or 'Bengaluru' }}">
+            </div>
+
+            <div class="col-md-8">
+              <label class="form-label fw-semibold small">Default Pickup Address</label>
+              <input type="text" class="form-control" name="address" value="{{ user.address or '' }}">
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label fw-semibold small">PIN Code</label>
+              <input type="text" class="form-control" name="pincode" value="{{ user.pincode or '' }}">
+            </div>
+
+            <div class="col-12">
+              <hr class="my-3">
+              <h6 class="fw-bold text-dark mb-2">Change Password (Leave blank to keep existing)</h6>
+            </div>
+
+            <div class="col-12">
+              <label class="form-label fw-semibold small">New Password</label>
+              <input type="password" class="form-control" name="new_password" minlength="6" placeholder="Enter new password if changing">
+            </div>
+
+            <div class="col-12 mt-4 d-flex justify-content-between">
+              <a href="{{ url_for('user_dashboard') }}" class="btn btn-outline-secondary">
+                <i class="fa-solid fa-arrow-left me-1"></i> Back to Dashboard
+              </a>
+              <button type="submit" class="btn btn-success px-4">
+                <i class="fa-solid fa-floppy-disk me-1"></i> Save Changes
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+

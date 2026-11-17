@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block title %}Manage Guidance & Awareness - Admin Portal{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <div>
+      <h3 class="fw-bold mb-1">Manage Proper Disposal Guidance Content</h3>
+      <p class="text-muted small mb-0">Update step-by-step instructions, do's & don'ts, and environmental hazards prevented.</p>
+    </div>
+    <div>
+      <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-secondary">
+        <i class="fa-solid fa-arrow-left me-1"></i> Dashboard
+      </a>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- Existing Guidelines Accordion -->
+    <div class="col-lg-7">
+      <div class="card card-eco shadow-sm p-4 bg-white">
+        <h5 class="fw-bold mb-3 border-bottom pb-2">Active Category Guidelines ({{ guidelines|length }})</h5>
+
+        <div class="accordion" id="guidanceAccordion">
+          {% for g in guidelines %}
+            <div class="accordion-item mb-2 border rounded overflow-hidden">
+              <h2 class="accordion-header" id="heading{{ g.id }}">
+                <button class="accordion-button collapsed fw-bold text-dark" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ g.id }}">
+                  <i class="fa-solid {{ g.icon_class }} text-success me-2"></i> {{ g.category }} - {{ g.title }}
+                </button>
+              </h2>
+              <div id="collapse{{ g.id }}" class="accordion-collapse collapse" data-bs-parent="#guidanceAccordion">
+                <div class="accordion-body small bg-light">
+                  <p class="mb-2"><strong>Summary:</strong> {{ g.summary }}</p>
+                  <p class="mb-2"><strong>Hazards Prevented:</strong> <span class="text-success">{{ g.hazards_prevented }}</span></p>
+                  <div class="row g-2">
+                    <div class="col-md-6">
+                      <div class="bg-white p-2 rounded border">
+                        <strong>Steps:</strong>
+                        <div style="white-space: pre-line;">{{ g.step_by_step[:180] }}...</div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="bg-white p-2 rounded border">
+                        <strong>Do's & Don'ts:</strong>
+                        <div style="white-space: pre-line;">{{ g.dos_and_donts[:180] }}...</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Add / Update Guideline Form -->
+    <div class="col-lg-5">
+      <div class="card card-eco shadow-sm p-4 bg-white">
+        <h5 class="fw-bold mb-3 border-bottom pb-2">Add / Update Category Guidance</h5>
+        <form method="POST" class="needs-validation" novalidate>
+          <div class="mb-3">
+            <label class="form-label small fw-semibold">Electronic Category <span class="text-danger">*</span></label>
+            <select class="form-select" name="category" required>
+              <option value="" disabled selected>-- Select Category --</option>
+              {% for cat in categories %}
+                <option value="{{ cat }}">{{ cat }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label small fw-semibold">Guideline Title <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" name="title" placeholder="e.g. Protocol for Lithium-Ion Cells" required>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label small fw-semibold">Executive Summary <span class="text-danger">*</span></label>
+            <textarea class="form-control" name="summary" rows="2" placeholder="Brief rationale..." required></textarea>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label small fw-semibold">Step-by-Step Instructions</label>
+            <textarea class="form-control" name="step_by_step" rows="3" placeholder="Step 1: ...&#10;Step 2: ..."></textarea>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label small fw-semibold">Do's and Don'ts</label>
+            <textarea class="form-control" name="dos_and_donts" rows="3" placeholder="DO: ...&#10;DON'T: ..."></textarea>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label small fw-semibold">Environmental Hazards Prevented</label>
+            <input type="text" class="form-control" name="hazards_prevented" placeholder="e.g. Eliminates cadmium leachate into groundwater">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label small fw-semibold">Font Awesome Icon Class</label>
+            <input type="text" class="form-control" name="icon_class" value="fa-recycle">
+          </div>
+
+          <button type="submit" class="btn btn-success w-100 fw-semibold">
+            <i class="fa-solid fa-floppy-disk me-1"></i> Save Guidance Content
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+

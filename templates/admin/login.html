@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}Administrator Login - E-Waste Portal{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+      <div class="card card-eco shadow-sm p-4 bg-white border-primary-subtle">
+        <div class="text-center mb-4">
+          <div class="p-3 bg-primary-subtle text-primary rounded-circle d-inline-block mb-2">
+            <i class="fa-solid fa-user-shield fs-2"></i>
+          </div>
+          <h3 class="fw-bold">Administrator Portal</h3>
+          <p class="text-muted small">Authorized personnel login for system monitoring, request approval, and centre verification.</p>
+        </div>
+
+        <form action="{{ url_for('admin_login') }}" method="POST" class="needs-validation" novalidate>
+          <div class="mb-3">
+            <label for="email" class="form-label fw-semibold small">Admin Email Address</label>
+            <div class="input-group">
+              <span class="input-group-text bg-light"><i class="fa-solid fa-envelope text-muted"></i></span>
+              <input type="email" class="form-control" id="email" name="email" value="admin@ewaste.gov.in" required autofocus>
+              <div class="invalid-feedback">Admin email required.</div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="password" class="form-label fw-semibold small">Security Password</label>
+            <div class="input-group">
+              <span class="input-group-text bg-light"><i class="fa-solid fa-key text-muted"></i></span>
+              <input type="password" class="form-control" id="password" name="password" placeholder="••••••••" value="admin123" required>
+              <div class="invalid-feedback">Password is required.</div>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold mb-3">
+            <i class="fa-solid fa-shield-halved me-2"></i> Access Admin Console
+          </button>
+        </form>
+
+        <div class="bg-light p-3 rounded text-center small text-secondary">
+          <strong>Default Admin Credentials (Seeded):</strong><br>
+          Email: <code>admin@ewaste.gov.in</code> &nbsp;|&nbsp; Password: <code>admin123</code>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+

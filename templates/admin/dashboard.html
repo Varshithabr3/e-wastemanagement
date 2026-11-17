@@ -1,0 +1,248 @@
+{% extends 'base.html' %}
+
+{% block title %}Administrator Dashboard - E-Waste Portal{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <!-- Admin Header -->
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <div>
+      <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-1 rounded-pill fw-bold mb-1">
+        <i class="fa-solid fa-shield-halved me-1"></i> Management Console
+      </span>
+      <h2 class="fw-bold mb-0">System Analytics & Operations Dashboard</h2>
+      <small class="text-muted">Administrator: <strong>{{ session.get('admin_name') }}</strong> ({{ session.get('admin_email') }})</small>
+    </div>
+    <div class="d-flex gap-2">
+      <a href="{{ url_for('admin_requests') }}" class="btn btn-warning">
+        <i class="fa-solid fa-clipboard-list me-1"></i> Review Requests ({{ pending_requests }} Pending)
+      </a>
+      <a href="{{ url_for('admin_add_centre') }}" class="btn btn-outline-success">
+        <i class="fa-solid fa-plus-circle me-1"></i> Add Recycling Centre
+      </a>
+    </div>
+  </div>
+
+  <!-- KPI Metric Summary Row -->
+  <div class="row g-3 mb-4">
+    <div class="col-lg-3 col-md-6">
+      <div class="stat-box">
+        <div>
+          <div class="stat-number text-success counter-anim" data-target="{{ total_users }}">{{ total_users }}</div>
+          <div class="stat-label">Registered Citizens</div>
+        </div>
+        <i class="fa-solid fa-users stat-icon text-success"></i>
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-md-6">
+      <div class="stat-box blue">
+        <div>
+          <div class="stat-number text-primary counter-anim" data-target="{{ total_items }}">{{ total_items }}</div>
+          <div class="stat-label">Total E-Waste Items</div>
+        </div>
+        <i class="fa-solid fa-boxes-stacked stat-icon text-primary"></i>
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-md-6">
+      <div class="stat-box teal">
+        <div>
+          <div class="stat-number text-info counter-anim" data-target="{{ total_requests }}">{{ total_requests }}</div>
+          <div class="stat-label">Collection Requests</div>
+        </div>
+        <i class="fa-solid fa-truck-pickup stat-icon text-info"></i>
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-md-6">
+      <div class="stat-box warning">
+        <div>
+          <div class="stat-number text-warning counter-anim" data-target="{{ total_centres }}">{{ total_centres }}</div>
+          <div class="stat-label">Recycling Centres</div>
+        </div>
+        <i class="fa-solid fa-building-circle-check stat-icon text-warning"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- Status Micro-Counters Bar -->
+  <div class="card card-eco p-3 mb-4 bg-white">
+    <div class="row text-center g-2 small">
+      <div class="col">
+        <div class="text-warning fw-bold fs-5">{{ pending_requests }}</div>
+        <div class="text-muted">Pending Review</div>
+      </div>
+      <div class="col border-start">
+        <div class="text-primary fw-bold fs-5">{{ approved_requests }}</div>
+        <div class="text-muted">Approved</div>
+      </div>
+      <div class="col border-start">
+        <div class="text-info fw-bold fs-5">{{ in_progress_requests }}</div>
+        <div class="text-muted">In Progress</div>
+      </div>
+      <div class="col border-start">
+        <div class="text-success fw-bold fs-5">{{ completed_requests }}</div>
+        <div class="text-muted">Recycled / Done</div>
+      </div>
+      <div class="col border-start">
+        <div class="text-danger fw-bold fs-5">{{ rejected_requests }}</div>
+        <div class="text-muted">Rejected</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Analytics Charts Row (Chart.js) -->
+  <div class="row g-4 mb-4">
+    <!-- Chart 1: Category Distribution -->
+    <div class="col-lg-4 col-md-6">
+      <div class="card card-eco h-100 p-4 bg-white">
+        <h5 class="fw-bold mb-1"><i class="fa-solid fa-chart-pie text-success me-2"></i> Category Breakdown</h5>
+        <p class="text-muted small mb-3">E-waste items logged by category</p>
+        <div style="position: relative; height: 260px;">
+          <canvas id="categoryChart" data-categories='{{ categories_data|tojson }}'></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chart 2: Request Status Bar Chart -->
+    <div class="col-lg-5 col-md-6">
+      <div class="card card-eco h-100 p-4 bg-white">
+        <h5 class="fw-bold mb-1"><i class="fa-solid fa-chart-column text-primary me-2"></i> Request Statuses</h5>
+        <p class="text-muted small mb-3">Workflow distribution of collection requests</p>
+        <div style="position: relative; height: 260px;">
+          <canvas id="statusChart" 
+                  data-pending="{{ pending_requests }}" 
+                  data-approved="{{ approved_requests }}" 
+                  data-inprogress="{{ in_progress_requests }}" 
+                  data-completed="{{ completed_requests }}" 
+                  data-rejected="{{ rejected_requests }}"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chart 3: Item Condition Pie Chart -->
+    <div class="col-lg-3 col-md-12">
+      <div class="card card-eco h-100 p-4 bg-white">
+        <h5 class="fw-bold mb-1"><i class="fa-solid fa-screwdriver-wrench text-warning me-2"></i> Condition</h5>
+        <p class="text-muted small mb-3">Physical state of items</p>
+        <div style="position: relative; height: 260px;">
+          <canvas id="conditionChart" data-conditions='{{ conditions_data|tojson }}'></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Collection Requests Table -->
+  <div class="card card-eco shadow-sm mb-4 bg-white">
+    <div class="card-header card-header-eco d-flex justify-content-between align-items-center py-3">
+      <span class="fw-bold"><i class="fa-solid fa-clipboard-list text-primary me-2"></i> Recent Collection Requests</span>
+      <a href="{{ url_for('admin_requests') }}" class="btn btn-sm btn-outline-primary">
+        View All Requests <i class="fa-solid fa-arrow-right ms-1"></i>
+      </a>
+    </div>
+    <div class="card-body p-0">
+      {% if recent_requests %}
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0 small">
+            <thead class="table-light">
+              <tr>
+                <th class="ps-3">Request ID</th>
+                <th>Citizen Details</th>
+                <th>Preferred Date</th>
+                <th>Preference</th>
+                <th>Items</th>
+                <th>Status</th>
+                <th class="text-end pe-3">Quick Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for req in recent_requests %}
+                <tr>
+                  <td class="ps-3 fw-bold font-monospace text-primary">
+                    <a href="{{ url_for('track_request_direct', request_code=req.request_code) }}" class="text-decoration-none">
+                      {{ req.request_code }}
+                    </a>
+                  </td>
+                  <td>
+                    <strong>{{ req.user.full_name }}</strong><br>
+                    <span class="text-muted">{{ req.user.phone }}</span>
+                  </td>
+                  <td>{{ req.preferred_date }}</td>
+                  <td>
+                    <span class="badge bg-light text-dark border">{{ req.preference_type }}</span>
+                  </td>
+                  <td><span class="badge bg-secondary-subtle text-secondary">{{ req.items|length }} items</span></td>
+                  <td>
+                    {% if req.status == 'Pending' %}
+                      <span class="badge-status badge-status-pending">Pending</span>
+                    {% elif req.status == 'Approved' %}
+                      <span class="badge-status badge-status-approved">Approved</span>
+                    {% elif req.status == 'In Progress' %}
+                      <span class="badge-status badge-status-in-progress">In Progress</span>
+                    {% elif req.status == 'Completed' %}
+                      <span class="badge-status badge-status-completed">Completed</span>
+                    {% else %}
+                      <span class="badge-status badge-status-rejected">Rejected</span>
+                    {% endif %}
+                  </td>
+                  <td class="text-end pe-3">
+                    <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#updateModal{{ req.id }}">
+                      <i class="fa-solid fa-pen-to-square me-1"></i> Update
+                    </button>
+                    <a href="{{ url_for('request_receipt', request_code=req.request_code) }}" class="btn btn-sm btn-outline-secondary" title="View Receipt">
+                      <i class="fa-solid fa-file-invoice"></i>
+                    </a>
+                  </td>
+                </tr>
+
+                <!-- Update Status Modal -->
+                <div class="modal fade" id="updateModal{{ req.id }}" tabindex="-1" aria-labelledby="modalLabel{{ req.id }}" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <form action="{{ url_for('admin_update_request', req_id=req.id) }}" method="POST">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="modalLabel{{ req.id }}">Update Status: {{ req.request_code }}</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-start">
+                          <div class="mb-3">
+                            <label class="form-label small fw-bold">Select Request Status</label>
+                            <select name="status" class="form-select" required>
+                              <option value="Pending" {% if req.status == 'Pending' %}selected{% endif %}>Pending</option>
+                              <option value="Approved" {% if req.status == 'Approved' %}selected{% endif %}>Approved (Scheduled)</option>
+                              <option value="In Progress" {% if req.status == 'In Progress' %}selected{% endif %}>In Progress (Out for collection)</option>
+                              <option value="Completed" {% if req.status == 'Completed' %}selected{% endif %}>Completed (Recycled)</option>
+                              <option value="Rejected" {% if req.status == 'Rejected' %}selected{% endif %}>Rejected</option>
+                            </select>
+                          </div>
+                          <div class="mb-3">
+                            <label class="form-label small fw-bold">Administrator Notes / Feedback</label>
+                            <textarea name="admin_notes" class="form-control" rows="3">{{ req.admin_notes or '' }}</textarea>
+                            <div class="form-text">Visible to the citizen on the receipt and tracking stepper.</div>
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-success">Save Status</button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <div class="text-center py-4 text-muted small">No collection requests logged yet.</div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}
+

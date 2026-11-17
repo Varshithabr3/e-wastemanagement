@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+
+{% block title %}Environmental Awareness - E-Waste Collection Drive{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <!-- Breadcrumb -->
+  <nav aria-label="breadcrumb" class="mb-3">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{{ url_for('index') }}" class="text-success text-decoration-none">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Environmental Awareness</li>
+    </ol>
+  </nav>
+
+  <!-- Module Header -->
+  <div class="row align-items-center mb-5 g-3">
+    <div class="col-lg-8">
+      <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 rounded-pill fw-bold mb-2">
+        <i class="fa-solid fa-earth-americas me-1"></i> Public Education Hub
+      </span>
+      <h2 class="fw-bold mb-1">Public Environmental Awareness on E-Waste</h2>
+      <p class="text-secondary small mb-0">
+        Understanding the ecological toll of electronic consumption, health hazards of hazardous toxins, and the immense resource potential of circular urban mining.
+      </p>
+    </div>
+    <div class="col-lg-4 text-lg-end">
+      <a href="{{ url_for('quiz') }}" class="btn btn-warning fw-bold px-4 shadow-sm">
+        <i class="fa-solid fa-award me-1"></i> Take Eco Quiz & Get Certificate
+      </a>
+    </div>
+  </div>
+
+  <!-- Infographic Cards: Toxic Substances & Health Hazards -->
+  <div class="card card-eco shadow-sm p-4 bg-white mb-5">
+    <div class="d-flex align-items-center gap-3 mb-4">
+      <div class="p-3 bg-danger-subtle text-danger rounded-circle">
+        <i class="fa-solid fa-biohazard fs-2"></i>
+      </div>
+      <div>
+        <h4 class="fw-bold mb-1">Hazardous Elements in Electronic Waste & Biological Impact</h4>
+        <p class="text-muted small mb-0">How improper disposal and informal burning threaten public health and ecosystems:</p>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-bordered align-middle small mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Chemical Element</th>
+            <th>Common Electronic Source</th>
+            <th>Human Health Effects</th>
+            <th>Environmental & Soil Consequences</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="fw-bold text-danger">Lead (Pb)</td>
+            <td>Circuit board solder, CRT screen funnels, lead-acid batteries</td>
+            <td>Severe central and peripheral nervous system impairment, cognitive deficits in children, chronic kidney disease.</td>
+            <td>Infiltrates groundwater; bioaccumulates in agricultural crops causing long-term soil toxicity.</td>
+          </tr>
+          <tr>
+            <td class="fw-bold text-danger">Mercury (Hg)</td>
+            <td>Cold-cathode fluorescent backlights, circuit relays, thermostats</td>
+            <td>Minamata syndrome, acute neurotoxicity, respiratory damage upon inhaling vapor, sensory loss.</td>
+            <td>Methylated by aquatic bacteria into methylmercury; accumulates exponentially up the aquatic food chain.</td>
+          </tr>
+          <tr>
+            <td class="fw-bold text-danger">Cadmium (Cd)</td>
+            <td>SMD chip resistors, Ni-Cd rechargeable batteries, semiconductors</td>
+            <td>Itai-Itai disease, osteomalacia (severe bone demineralization), lung emphysema, renal cortical necrosis.</td>
+            <td>Highly mobile in acidic soils; taken up by staple crops such as rice and wheat, entering human diet.</td>
+          </tr>
+          <tr>
+            <td class="fw-bold text-danger">Brominated Flame Retardants (BFRs)</td>
+            <td>Plastic computer casings, printed circuit boards</td>
+            <td>Endocrine disruption, thyroid hormone interference, immunological suppression, potential reproductive harm.</td>
+            <td>When incinerated in open air, converts into toxic polybrominated dioxins and furans that persist for decades.</td>
+          </tr>
+          <tr>
+            <td class="fw-bold text-danger">Hexavalent Chromium (Cr VI)</td>
+            <td>Galvanized metal chassis coatings, anti-corrosive treatments</td>
+            <td>Asthmatic attacks, severe nasal septum perforations, DNA damage, pulmonary cancer.</td>
+            <td>Strong oxidizing agent that easily leaches into local rivers and alters aquatic microbiological balance.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Educational Articles Grid -->
+  <div class="row g-4 mb-5">
+    {% for article in articles %}
+      <div class="col-md-4">
+        <div class="card card-eco h-100 p-4 bg-white d-flex flex-column">
+          <span class="badge bg-info-subtle text-info border border-info-subtle align-self-start mb-2">{{ article.category }}</span>
+          <h5 class="fw-bold text-dark mb-2">{{ article.title }}</h5>
+          <p class="small text-muted mb-3 flex-grow-1">{{ article.summary }}</p>
+
+          <div class="bg-light p-3 rounded small mb-3">
+            <div class="mb-1"><strong>Substances:</strong> <span class="text-secondary">{{ article.toxic_substance }}</span></div>
+            {% if article.health_hazard %}
+              <div class="mb-1"><strong>Health Risk:</strong> <span class="text-danger">{{ article.health_hazard }}</span></div>
+            {% endif %}
+          </div>
+
+          <div class="small text-secondary" style="line-height: 1.5;">
+            {{ article.content }}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  <!-- Circular Economy & Urban Mining Spotlight -->
+  <div class="card card-eco shadow-sm p-4 bg-white mb-5 border-success-subtle">
+    <div class="row align-items-center g-4">
+      <div class="col-lg-8">
+        <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill fw-bold mb-2">Resource Revolution</span>
+        <h3 class="fw-bold mb-2">Urban Mining: Recovering Value, Saving the Planet</h3>
+        <p class="text-secondary small">
+          Electronics are modern high-grade mineral deposits. <strong>1 tonne of smartphones contains approximately 300g of gold, 2kg of silver, and 130kg of copper</strong>. In contrast, 1 tonne of raw gold ore mined from the earth yields less than 5g of gold.
+        </p>
+        <p class="text-muted small mb-0">
+          By channelizing e-waste through scientific hydro-metallurgical recyclers, society avoids opencast mining devastation, cuts chemical leaching pollution, and decreases carbon emissions by up to 80% per ounce of metal recovered.
+        </p>
+      </div>
+      <div class="col-lg-4 text-center">
+        <div class="p-3 bg-light rounded border text-start small">
+          <div class="d-flex justify-content-between mb-2">
+            <span>Gold per Tonne (Smartphones):</span>
+            <span class="fw-bold text-warning">~300 grams</span>
+          </div>
+          <div class="d-flex justify-content-between mb-2">
+            <span>Gold per Tonne (Mined Ore):</span>
+            <span class="fw-bold text-muted">&lt; 5 grams</span>
+          </div>
+          <div class="d-flex justify-content-between mb-2">
+            <span>Carbon Footprint Reduction:</span>
+            <span class="fw-bold text-success">80% Less CO₂</span>
+          </div>
+          <div class="d-flex justify-content-between">
+            <span>Landfill Diversion:</span>
+            <span class="fw-bold text-primary">100% Zero Landfill</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quiz CTA Banner -->
+  <div class="p-4 bg-light rounded-3 text-center border">
+    <h4 class="fw-bold mb-2">Ready to Test Your E-Waste Environmental Knowledge?</h4>
+    <p class="text-muted small mb-3">Complete our 10-question quiz, receive immediate answers with scientific explanations, and download your personalized Eco-Awareness Certificate.</p>
+    <a href="{{ url_for('quiz') }}" class="btn btn-success px-4 py-2 fw-semibold">
+      <i class="fa-solid fa-circle-question me-1"></i> Start 10-Question Eco Quiz
+    </a>
+  </div>
+</div>
+{% endblock %}
+

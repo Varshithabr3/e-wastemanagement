@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+
+{% block title %}Official Receipt - {{ req.request_code }}{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <!-- Actions Bar (Hidden on print) -->
+  <div class="d-flex justify-content-between align-items-center mb-4 no-print">
+    <a href="{{ url_for('track_request_direct', request_code=req.request_code) }}" class="btn btn-outline-secondary">
+      <i class="fa-solid fa-arrow-left me-1"></i> Back to Tracking
+    </a>
+    <div class="d-flex gap-2">
+      <button onclick="window.print()" class="btn btn-success">
+        <i class="fa-solid fa-print me-1"></i> Print / Save as PDF
+      </button>
+      <a href="{{ url_for('user_dashboard') }}" class="btn btn-outline-primary">
+        <i class="fa-solid fa-house me-1"></i> Dashboard
+      </a>
+    </div>
+  </div>
+
+  <!-- Formal Manifest Receipt Container -->
+  <div class="receipt-wrapper position-relative bg-white">
+    <!-- Academic Watermark -->
+    <div class="receipt-watermark">ACADEMIC PROTOTYPE</div>
+
+    <!-- Receipt Header -->
+    <div class="d-flex justify-content-between align-items-start border-bottom pb-3 mb-4">
+      <div>
+        <div class="d-flex align-items-center gap-2 mb-1">
+          <i class="fa-solid fa-recycle text-success fs-3"></i>
+          <h4 class="fw-bold text-dark mb-0">E-Waste Management System</h4>
+        </div>
+        <p class="text-muted small mb-0">Digital Collection Drive & Environmental Science Academic Initiative</p>
+        <span class="badge bg-secondary-subtle text-secondary border mt-1">Course: BCSP508 - CSE</span>
+      </div>
+      <div class="text-end">
+        <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 fw-bold mb-1">
+          OFFICIAL COLLECTION RECEIPT
+        </span>
+        <div class="fw-bold font-monospace text-primary fs-5">{{ req.request_code }}</div>
+        <small class="text-muted">Issued: {{ req.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+      </div>
+    </div>
+
+    <!-- User & Collection Meta Grid -->
+    <div class="row g-3 mb-4 small">
+      <div class="col-6">
+        <h6 class="fw-bold text-muted text-uppercase mb-2 border-bottom pb-1">Citizen / Requester Information</h6>
+        <div><strong>Name:</strong> {{ req.user.full_name }}</div>
+        <div><strong>Email:</strong> {{ req.user.email }}</div>
+        <div><strong>Contact:</strong> {{ req.user.phone }}</div>
+      </div>
+
+      <div class="col-6">
+        <h6 class="fw-bold text-muted text-uppercase mb-2 border-bottom pb-1">Collection Scheduling</h6>
+        <div><strong>Preference:</strong> {{ req.preference_type }}</div>
+        <div><strong>Scheduled Date:</strong> {{ req.preferred_date }}</div>
+        <div><strong>Location:</strong> {{ req.pickup_address }}, {{ req.city }} - {{ req.pincode }}</div>
+      </div>
+    </div>
+
+    <!-- Itemized List Table -->
+    <div class="table-responsive mb-4">
+      <table class="table table-bordered table-sm align-middle">
+        <thead class="table-light small">
+          <tr>
+            <th style="width: 50px;" class="text-center">#</th>
+            <th>Registered E-Waste Item</th>
+            <th>Category</th>
+            <th>Condition</th>
+            <th style="width: 70px;" class="text-center">Qty</th>
+          </tr>
+        </thead>
+        <tbody class="small">
+          {% for item in req.items %}
+            <tr>
+              <td class="text-center">{{ loop.index }}</td>
+              <td>
+                <div class="fw-bold">{{ item.item_name }}</div>
+                {% if item.description %}
+                  <div class="text-muted" style="font-size: 0.8rem;">{{ item.description }}</div>
+                {% endif %}
+              </td>
+              <td>{{ item.category }}</td>
+              <td>
+                {% if item.item_condition == 'Working' %}
+                  <span class="badge bg-success-subtle text-success">Working</span>
+                {% elif item.item_condition == 'Damaged' %}
+                  <span class="badge bg-warning-subtle text-warning">Damaged</span>
+                {% else %}
+                  <span class="badge bg-danger-subtle text-danger">Not Working</span>
+                {% endif %}
+              </td>
+              <td class="text-center fw-bold">{{ item.quantity }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+        <tfoot class="table-light small">
+          <tr>
+            <td colspan="4" class="text-end fw-bold">Total Electronic Units:</td>
+            <td class="text-center fw-bold text-success">{{ req.items|sum(attribute='quantity') }}</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <!-- Current Status Box -->
+    <div class="p-3 bg-light rounded border mb-4 small">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <span class="text-muted me-2">Verification Status:</span>
+          {% if req.status == 'Pending' %}
+            <span class="badge-status badge-status-pending">Pending Review</span>
+          {% elif req.status == 'Approved' %}
+            <span class="badge-status badge-status-approved">Approved & Scheduled</span>
+          {% elif req.status == 'In Progress' %}
+            <span class="badge-status badge-status-in-progress">In Progress</span>
+          {% elif req.status == 'Completed' %}
+            <span class="badge-status badge-status-completed">Recycled / Completed</span>
+          {% else %}
+            <span class="badge-status badge-status-rejected">Rejected</span>
+          {% endif %}
+        </div>
+        <div class="text-muted">
+          Updated: {{ req.updated_at.strftime('%Y-%m-%d %H:%M') if req.updated_at else req.created_at.strftime('%Y-%m-%d %H:%M') }}
+        </div>
+      </div>
+      {% if req.admin_notes %}
+        <div class="mt-2 text-secondary">
+          <strong>Admin Remarks:</strong> {{ req.admin_notes }}
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- Legal & Academic Notice Footer -->
+    <div class="border-top pt-3 text-muted small" style="font-size: 0.78rem;">
+      <div class="row align-items-center">
+        <div class="col-8">
+          <p class="mb-1">
+            <strong>Statutory Compliance:</strong> In alignment with India's <em>E-Waste (Management) Rules, 2022</em> and Extended Producer Responsibility (EPR) mandates issued by CPCB & KSPCB.
+          </p>
+          <p class="mb-0 text-secondary">
+            * Disclaimer: This digital receipt is generated as an academic software project demonstration. No physical scrap transaction or monetary value is represented.
+          </p>
+        </div>
+        <div class="col-4 text-end">
+          <div class="p-2 border rounded d-inline-block text-center bg-light">
+            <i class="fa-solid fa-stamp text-success fs-3"></i>
+            <div class="fw-bold text-success" style="font-size: 0.65rem;">DIGITALLY VERIFIED</div>
+            <div class="font-monospace text-muted" style="font-size: 0.6rem;">{{ req.request_code[:12] }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+

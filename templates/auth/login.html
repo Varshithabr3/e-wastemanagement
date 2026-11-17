@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}User Login - E-Waste Collection Drive{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+      <div class="card card-eco shadow-sm p-4 bg-white">
+        <div class="text-center mb-4">
+          <div class="p-3 bg-success-subtle text-success rounded-circle d-inline-block mb-2">
+            <i class="fa-solid fa-arrow-right-to-bracket fs-3"></i>
+          </div>
+          <h3 class="fw-bold">User Login</h3>
+          <p class="text-muted small">Sign in to manage your e-waste records and track collection requests.</p>
+        </div>
+
+        <form action="{{ url_for('login', next=request.args.get('next')) }}" method="POST" class="needs-validation"
+          novalidate>
+          <div class="mb-3">
+            <label for="email" class="form-label fw-semibold small">Email Address</label>
+            <div class="input-group">
+              <span class="input-group-text bg-light"><i class="fa-solid fa-envelope text-muted"></i></span>
+              <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" required
+                autofocus>
+              <div class="invalid-feedback">Please enter a valid email address.</div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <label for="password" class="form-label fw-semibold small mb-0">Password</label>
+              <a href="{{ url_for('forgot_password') }}" class="small text-success text-decoration-none">Forgot
+                password?</a>
+            </div>
+            <div class="input-group">
+              <span class="input-group-text bg-light"><i class="fa-solid fa-lock text-muted"></i></span>
+              <input type="password" class="form-control" id="password" name="password" placeholder="••••••••" required>
+              <div class="invalid-feedback">Password is required.</div>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-success w-100 py-2 fw-semibold mb-3">
+            <i class="fa-solid fa-right-to-bracket me-2"></i> Log In
+          </button>
+        </form>
+
+        <div class="text-center small text-muted">
+          Don't have an account yet?
+          <a href="{{ url_for('register') }}" class="text-success fw-bold text-decoration-none">Register here</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

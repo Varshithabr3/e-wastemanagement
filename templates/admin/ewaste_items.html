@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+
+{% block title %}All E-Waste Records - Admin Portal{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <div>
+      <h3 class="fw-bold mb-1">Global E-Waste Inventory</h3>
+      <p class="text-muted small mb-0">Complete database of all electronic waste cataloged by registered citizens.</p>
+    </div>
+    <div>
+      <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-secondary">
+        <i class="fa-solid fa-arrow-left me-1"></i> Dashboard
+      </a>
+    </div>
+  </div>
+
+  <!-- Search & Filter Bar -->
+  <div class="card card-eco p-3 mb-4 bg-white shadow-sm">
+    <form method="GET" action="{{ url_for('admin_items') }}" class="row g-2 align-items-center">
+      <div class="col-md-4">
+        <input type="text" name="q" class="form-control form-control-sm" placeholder="Search by item name or city..." value="{{ search_query }}">
+      </div>
+      <div class="col-md-3">
+        <select name="category" class="form-select form-select-sm">
+          <option value="">-- All Categories --</option>
+          {% for cat in categories %}
+            <option value="{{ cat }}" {% if selected_category == cat %}selected{% endif %}>{{ cat }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-3">
+        <select name="condition" class="form-select form-select-sm">
+          <option value="">-- All Conditions --</option>
+          <option value="Working" {% if selected_condition == 'Working' %}selected{% endif %}>Working</option>
+          <option value="Damaged" {% if selected_condition == 'Damaged' %}selected{% endif %}>Damaged</option>
+          <option value="Not Working" {% if selected_condition == 'Not Working' %}selected{% endif %}>Not Working</option>
+        </select>
+      </div>
+      <div class="col-md-2 d-flex gap-1">
+        <button type="submit" class="btn btn-sm btn-primary w-100">Filter</button>
+        <a href="{{ url_for('admin_items') }}" class="btn btn-sm btn-outline-secondary"><i class="fa-solid fa-rotate-left"></i></a>
+      </div>
+    </form>
+  </div>
+
+  <!-- Items Table -->
+  <div class="card card-eco shadow-sm bg-white">
+    <div class="card-body p-0">
+      {% if items %}
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0 small">
+            <thead class="table-light">
+              <tr>
+                <th class="ps-3">ID</th>
+                <th>Item & Photograph</th>
+                <th>Category</th>
+                <th>Qty</th>
+                <th>Condition</th>
+                <th>Owner (Citizen)</th>
+                <th>Location</th>
+                <th>Status</th>
+                <th class="text-end pe-3">Date Registered</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in items %}
+                <tr>
+                  <td class="ps-3 fw-bold text-muted">#{{ item.id }}</td>
+                  <td>
+                    <div class="d-flex align-items-center gap-2">
+                      {% if item.image_filename %}
+                        <a href="{{ url_for('static', filename='uploads/' + item.image_filename) }}" target="_blank">
+                          <img src="{{ url_for('static', filename='uploads/' + item.image_filename) }}" alt="Photo" class="rounded border" style="width: 36px; height: 36px; object-fit: cover;">
+                        </a>
+                      {% else %}
+                        <span class="badge bg-light text-muted border"><i class="fa-solid fa-microchip"></i></span>
+                      {% endif %}
+                      <div>
+                        <div class="fw-bold text-dark">{{ item.item_name }}</div>
+                        {% if item.description %}
+                          <small class="text-muted d-block" style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            {{ item.description }}
+                          </small>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </td>
+                  <td><span class="badge bg-success-subtle text-success">{{ item.category }}</span></td>
+                  <td class="fw-bold">{{ item.quantity }}</td>
+                  <td>
+                    {% if item.item_condition == 'Working' %}
+                      <span class="badge bg-success-subtle text-success">Working</span>
+                    {% elif item.item_condition == 'Damaged' %}
+                      <span class="badge bg-warning-subtle text-warning">Damaged</span>
+                    {% else %}
+                      <span class="badge bg-danger-subtle text-danger">Not Working</span>
+                    {% endif %}
+                  </td>
+                  <td>
+                    <strong>{{ item.user.full_name }}</strong><br>
+                    <span class="text-muted" style="font-size: 0.75rem;">{{ item.user.email }}</span>
+                  </td>
+                  <td>{{ item.location }}</td>
+                  <td>
+                    {% if item.status == 'Available' %}
+                      <span class="badge bg-info-subtle text-info border">Available</span>
+                    {% elif item.status == 'In Request' %}
+                      <span class="badge bg-warning-subtle text-warning border">In Request</span>
+                    {% elif item.status == 'Collected' %}
+                      <span class="badge bg-success-subtle text-success border">Collected</span>
+                    {% else %}
+                      <span class="badge bg-secondary-subtle text-secondary">{{ item.status }}</span>
+                    {% endif %}
+                  </td>
+                  <td class="text-end pe-3 text-muted">{{ item.created_at.strftime('%Y-%m-%d') }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <div class="text-center py-5 text-muted small">No e-waste items match your filter criteria.</div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+
