@@ -1,9 +1,6 @@
--- ============================================================================
--- E-Waste Collection Drive and Public Awareness Management System
+-- EcoCycle - Responsible E-Waste Management Platform
 -- Database Schema: ewaste_management
 -- Technology: MySQL 8.0+
--- Course / Project: Academic Software Project (BCSP508 - CSE / Environmental Science)
--- ============================================================================
 
 CREATE DATABASE IF NOT EXISTS `ewaste_management` 
 CHARACTER SET utf8mb4 

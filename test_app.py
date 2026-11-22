@@ -17,7 +17,7 @@ class EWasteSystemTestCase(unittest.TestCase):
         # 1. Homepage
         resp = self.client.get('/')
         self.assertEqual(resp.status_code, 200)
-        self.assertIn(b'Smart E-Waste Collection Drive', resp.data)
+        self.assertIn(b'Smart E-Waste Collection &amp; Certified Electronics Recycling', resp.data)
 
         # 2. About page
         resp = self.client.get('/about')

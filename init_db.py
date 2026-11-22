@@ -416,7 +416,7 @@ def initialize_database():
         if not demo_user:
             print("Seeding sample User (student@college.edu)...")
             demo_user = User(
-                full_name="College Student User",
+                full_name="Citizen User",
                 email="student@college.edu",
                 phone="+91 98451 22334",
                 password_hash=generate_password_hash("student123"),
@@ -491,7 +491,7 @@ def initialize_database():
                 preferred_date=date.today() + timedelta(days=3),
                 preference_type="Doorstep Pickup",
                 status="Approved",
-                admin_notes="Assigned to CPCB/KSPCB Partner Route B-4. Academic simulation scheduled."
+                admin_notes="Assigned to CPCB/KSPCB Partner Route B-4. Logistics pickup scheduled."
             )
             req1.items.extend([item1, item2, item3])
 
@@ -504,7 +504,7 @@ def initialize_database():
                 preferred_date=date.today() - timedelta(days=12),
                 preference_type="Doorstep Pickup",
                 status="Completed",
-                admin_notes="Academic drive simulation completed. Recycling certificate logged."
+                admin_notes="Collection completed. Received by authorized recycler. Manifest closed."
             )
             req2.items.append(item5)
 

@@ -45,6 +45,8 @@ def inject_global_context():
         current_user=user,
         current_admin=admin,
         current_year=datetime.now().year,
+        site_name="EcoCycle",
+        site_tagline="Responsible E-Waste Management",
         categories=[
             'Mobile Phones', 'Laptops', 'Computers', 
             'Batteries', 'Chargers', 'Televisions', 'Other Electronics'

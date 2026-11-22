@@ -1,67 +1,69 @@
 {% extends 'base.html' %}
 
-{% block title %}Environmental Awareness Quiz & Certificate{% endblock %}
+{% block title %}Environmental Awareness Quiz - EcoCycle{% endblock %}
 
 {% block content %}
-<div class="container py-4" id="quizContainer">
+<div class="container py-4">
   <!-- Breadcrumb -->
-  <nav aria-label="breadcrumb" class="mb-3 no-print">
+  <nav aria-label="breadcrumb" class="mb-3">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="{{ url_for('index') }}" class="text-success text-decoration-none">Home</a></li>
-      <li class="breadcrumb-item"><a href="{{ url_for('awareness') }}" class="text-success text-decoration-none">Awareness</a></li>
+      <li class="breadcrumb-item"><a href="{{ url_for('index') }}" class="text-success text-decoration-none">Home</a>
+      </li>
+      <li class="breadcrumb-item"><a href="{{ url_for('awareness') }}"
+          class="text-success text-decoration-none">Awareness</a></li>
       <li class="breadcrumb-item active" aria-current="page">Eco Quiz</li>
     </ol>
   </nav>
 
   <div class="row justify-content-center">
     <div class="col-lg-8">
-      <!-- Quiz Interactive Card -->
+      <!-- Quiz Card Container -->
       <div class="card card-eco shadow-sm p-4 bg-white" id="quizCard">
-        <!-- Progress Bar -->
-        <div class="d-flex justify-content-between align-items-center mb-2">
-          <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1 rounded-pill fw-bold" id="quizQuestionNum">
-            Question 1 of 10
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <span
+            class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1 rounded-pill fw-bold">
+            <i class="fa-solid fa-brain me-1"></i> Eco-Awareness Evaluation
           </span>
-          <span class="small text-muted"><i class="fa-solid fa-leaf text-success me-1"></i> Eco-Awareness Challenge</span>
+          <span class="text-muted small fw-semibold" id="quizQuestionNum">Question 1 of 10</span>
         </div>
-        <div class="progress mb-4" style="height: 6px;">
+
+        <!-- Progress Bar -->
+        <div class="progress mb-4" style="height: 8px;">
           <div class="progress-bar bg-success" id="quizProgressBar" role="progressbar" style="width: 10%;"></div>
         </div>
 
-        <!-- Question Title -->
         <h4 class="fw-bold text-dark mb-4" id="quizQuestionText">
           Loading question...
         </h4>
 
         <!-- Options Container -->
-        <div id="quizOptionsContainer" class="mb-3">
-          <!-- Populated by quiz.js -->
+        <div id="quizOptionsContainer" class="mb-4">
+          <!-- Populated by JavaScript -->
         </div>
 
-        <!-- Explanation / Feedback Box -->
+        <!-- Feedback Box -->
         <div id="quizFeedbackBox" class="mb-4 d-none">
-          <!-- Populated by quiz.js -->
+          <!-- Feedback alert injected by JS -->
         </div>
 
-        <!-- Next / Submit Button -->
-        <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+        <div class="d-flex justify-content-between align-items-center border-top pt-3">
           <a href="{{ url_for('awareness') }}" class="btn btn-outline-secondary">
             <i class="fa-solid fa-arrow-left me-1"></i> Exit Quiz
           </a>
-          <button type="button" id="quizNextBtn" class="btn btn-success px-4 fw-semibold">
+          <button type="button" class="btn btn-success px-4" id="quizNextBtn">
             Submit Answer
           </button>
         </div>
       </div>
 
-      <!-- Quiz Final Results Card (Initially hidden) -->
-      <div class="card card-eco shadow-sm p-4 bg-white d-none" id="quizResultsCard">
-        <div class="text-center py-3">
-          <div class="display-3 text-warning mb-2">
-            <i class="fa-solid fa-trophy"></i>
+      <!-- Quiz Results Card (Hidden by default) -->
+      <div class="card card-eco shadow-sm p-4 bg-white text-center d-none" id="quizResultsCard">
+        <div class="py-4">
+          <div class="p-3 bg-success-subtle text-success rounded-circle d-inline-block mb-3">
+            <i class="fa-solid fa-trophy fs-1"></i>
           </div>
-          <h2 class="fw-bold mb-1" id="quizBadgeTitle">🌟 Master Eco-Champion</h2>
-          <p class="text-muted small" id="quizBadgeMessage">
+          <h2 class="fw-bold mb-1" id="quizBadgeTitle">Quiz Completed!</h2>
+          <p class="text-muted small mb-4" id="quizBadgeMessage">
             Congratulations on completing the Public Environmental Awareness E-Waste Evaluation!
           </p>
 
@@ -72,39 +74,45 @@
           <!-- Certificate Form Input -->
           <div class="card bg-light border p-3 max-w-500 mx-auto text-start my-4 no-print" style="max-width: 480px;">
             <label class="form-label small fw-bold">Enter Your Name for the Certificate:</label>
-            <input type="text" id="certNameInput" class="form-control" placeholder="e.g. Varshitha R / Your Name" value="{{ session.get('user_name', '') }}">
+            <input type="text" id="certNameInput" class="form-control" placeholder="e.g. Alex Morgan / Your Name"
+              value="{{ session.get('user_name', '') }}">
             <div class="form-text text-muted">Type your name above to personalize the certificate below.</div>
           </div>
 
           <!-- Printable Certificate Component -->
-          <div class="receipt-wrapper p-4 p-md-5 my-4 bg-white border-2 border-success rounded-4 position-relative text-center" id="printableCertificate">
+          <div
+            class="receipt-wrapper p-4 p-md-5 my-4 bg-white border-2 border-success rounded-4 position-relative text-center"
+            id="printableCertificate">
             <div class="d-flex justify-content-between align-items-center mb-3">
               <i class="fa-solid fa-recycle text-success fs-1"></i>
               <span class="badge bg-success text-white px-3 py-1">CERTIFICATE OF RECOGNITION</span>
               <i class="fa-solid fa-award text-warning fs-1"></i>
             </div>
 
-            <h5 class="text-uppercase text-secondary tracking-wide mb-1" style="letter-spacing: 2px;">This certifies that</h5>
+            <h5 class="text-uppercase text-secondary tracking-wide mb-1" style="letter-spacing: 2px;">This certifies
+              that</h5>
             <h2 class="fw-bold text-dark border-bottom pb-2 mb-3 font-serif" id="certNameDisplay">
               {{ session.get('user_name', 'Eco Participant') }}
             </h2>
 
             <p class="small text-secondary mb-3">
-              Has successfully completed the <strong>Environmental E-Waste Awareness & Safety Evaluation</strong>, demonstrating exemplary understanding of hazardous electronic materials, statutory CPCB & KSPCB guidelines, and responsible circular electronic disposal protocols.
+              Has successfully completed the <strong>Environmental E-Waste Awareness &amp; Safety Evaluation</strong>,
+              demonstrating exemplary understanding of hazardous electronic materials, statutory CPCB &amp; KSPCB
+              guidelines, and responsible circular electronic disposal protocols.
             </p>
 
             <div class="d-flex justify-content-between align-items-end mt-4 pt-3 border-top small text-muted">
               <div class="text-start">
                 <div><strong>Award Date:</strong> <span id="certDateDisplay"></span></div>
-                <div><strong>Course:</strong> BCSP508 - CSE Final Project</div>
+                <div><strong>Program:</strong> National E-Waste Stewardship Program</div>
               </div>
               <div class="text-center">
                 <i class="fa-solid fa-stamp text-success fs-2"></i>
                 <div class="fw-bold text-success" style="font-size: 0.7rem;">OFFICIAL ECO-SEAL</div>
               </div>
               <div class="text-end">
-                <div><strong>Platform:</strong> EcoDrive Management Portal</div>
-                <div><strong>Evaluation:</strong> Academic Software Prototype</div>
+                <div><strong>Issued By:</strong> EcoCycle Sustainability Initiative</div>
+                <div><strong>Verification:</strong> Certified Environmental Assessment</div>
               </div>
             </div>
           </div>
@@ -131,4 +139,3 @@
 {% block extra_scripts %}
 <script src="{{ url_for('static', filename='js/quiz.js') }}"></script>
 {% endblock %}
-

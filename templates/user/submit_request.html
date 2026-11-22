@@ -7,19 +7,22 @@
   <!-- Breadcrumb -->
   <nav aria-label="breadcrumb" class="mb-3">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="{{ url_for('user_dashboard') }}" class="text-success text-decoration-none">Dashboard</a></li>
+      <li class="breadcrumb-item"><a href="{{ url_for('user_dashboard') }}"
+          class="text-success text-decoration-none">Dashboard</a></li>
       <li class="breadcrumb-item active" aria-current="page">Submit Collection Request</li>
     </ol>
   </nav>
 
   <div class="row justify-content-center">
     <div class="col-lg-9">
-      <!-- Academic Prototype Banner -->
-      <div class="alert alert-warning border-warning-subtle shadow-sm mb-4">
+      <!-- Logistics Advisory Banner -->
+      <div class="alert alert-info border-info-subtle shadow-sm mb-4">
         <div class="d-flex align-items-center gap-2">
-          <i class="fa-solid fa-circle-info fs-4 text-warning"></i>
+          <i class="fa-solid fa-truck-fast fs-4 text-info"></i>
           <div>
-            <strong>Academic Simulation Notice:</strong> This collection request generates an authentic digital receipt and tracking ID for college evaluation. Actual physical vehicle pickup is software-simulated.
+            <strong>Collection Scheduling &amp; Logistics:</strong> Your collection request will be coordinated with our
+            authorized recycling logistics network. Please ensure devices are packed safely and review our pre-disposal
+            guidelines.
           </div>
         </div>
       </div>
@@ -36,118 +39,130 @@
         </div>
 
         {% if available_items %}
-          <form action="{{ url_for('submit_request') }}" method="POST" class="needs-validation" novalidate>
-            <!-- Step 1: Item Selection -->
-            <div class="mb-4">
-              <div class="d-flex justify-content-between align-items-center mb-2">
-                <label class="form-label fw-bold mb-0">
-                  <i class="fa-solid fa-square-check text-success me-1"></i> Step 1: Select Available E-Waste Items 
-                  <span class="badge bg-success ms-1"><span id="selectedItemsCount">0</span> selected</span>
-                </label>
-                <div class="form-check form-check-inline small mb-0">
-                  <input class="form-check-input" type="checkbox" id="selectAllItems">
-                  <label class="form-check-label text-muted" for="selectAllItems">Select All</label>
-                </div>
+        <form action="{{ url_for('submit_request') }}" method="POST" class="needs-validation" novalidate>
+          <!-- Step 1: Item Selection -->
+          <div class="mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <label class="form-label fw-bold mb-0">
+                <i class="fa-solid fa-square-check text-success me-1"></i> Step 1: Select Available E-Waste Items
+                <span class="badge bg-success ms-1"><span id="selectedItemsCount">0</span> selected</span>
+              </label>
+              <div class="form-check form-check-inline small mb-0">
+                <input class="form-check-input" type="checkbox" id="selectAllItems">
+                <label class="form-check-label text-muted" for="selectAllItems">Select All</label>
               </div>
+            </div>
 
-              <div class="border rounded-3 p-3 bg-light" style="max-height: 280px; overflow-y: auto;">
-                {% for item in available_items %}
-                  <div class="form-check border-bottom pb-2 mb-2 bg-white p-2 rounded shadow-sm d-flex align-items-center justify-content-between">
-                    <div>
-                      <input class="form-check-input ewaste-select-checkbox me-2" type="checkbox" name="item_ids" value="{{ item.id }}" id="item_{{ item.id }}">
-                      <label class="form-check-label fw-semibold text-dark" for="item_{{ item.id }}">
-                        {{ item.item_name }}
-                      </label>
-                      <div class="small text-muted ms-4">
-                        <span class="badge bg-light text-secondary border me-1">{{ item.category }}</span>
-                        <span class="badge bg-light text-secondary border me-1">Qty: {{ item.quantity }}</span>
-                        Condition: <span class="fw-semibold">{{ item.item_condition }}</span>
-                      </div>
-                    </div>
-                    {% if item.image_filename %}
-                      <img src="{{ url_for('static', filename='uploads/' + item.image_filename) }}" alt="Thumbnail" class="rounded border ms-2" style="width: 40px; height: 40px; object-fit: cover;">
-                    {% endif %}
+            <div class="border rounded-3 p-3 bg-light" style="max-height: 280px; overflow-y: auto;">
+              {% for item in available_items %}
+              <div
+                class="form-check border-bottom pb-2 mb-2 bg-white p-2 rounded shadow-sm d-flex align-items-center justify-content-between">
+                <div>
+                  <input class="form-check-input ewaste-select-checkbox me-2" type="checkbox" name="item_ids"
+                    value="{{ item.id }}" id="item_{{ item.id }}">
+                  <label class="form-check-label fw-semibold text-dark" for="item_{{ item.id }}">
+                    {{ item.item_name }}
+                  </label>
+                  <div class="small text-muted ms-4">
+                    <span class="badge bg-light text-secondary border me-1">{{ item.category }}</span>
+                    <span class="badge bg-light text-secondary border me-1">Qty: {{ item.quantity }}</span>
+                    Condition: <span class="fw-semibold">{{ item.item_condition }}</span>
                   </div>
-                {% endfor %}
+                </div>
+                {% if item.image_filename %}
+                <img src="{{ url_for('static', filename='uploads/' + item.image_filename) }}" alt="Thumbnail"
+                  class="rounded border ms-2" style="width: 40px; height: 40px; object-fit: cover;">
+                {% endif %}
               </div>
+              {% endfor %}
             </div>
-
-            <!-- Step 2: Collection Preference & Date -->
-            <div class="mb-4">
-              <label class="form-label fw-bold mb-2">
-                <i class="fa-solid fa-calendar-day text-primary me-1"></i> Step 2: Schedule & Preference
-              </label>
-              <div class="row g-3">
-                <div class="col-md-6">
-                  <label for="preference_type" class="form-label small fw-semibold">Collection Preference</label>
-                  <select class="form-select" id="preference_type" name="preference_type" required>
-                    <option value="Doorstep Pickup" selected>Doorstep Pickup (Simulated Van Dispatch)</option>
-                    <option value="Centre Drop-Off">Drop-off at Authorized Recycling Centre</option>
-                  </select>
-                </div>
-
-                <div class="col-md-6">
-                  <label for="preferred_date" class="form-label small fw-semibold">Preferred Collection Date <span class="text-danger">*</span></label>
-                  <input type="date" class="form-control" id="preferred_date" name="preferred_date" required>
-                  <div class="invalid-feedback">Please choose a valid collection date.</div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Step 3: Address Details -->
-            <div class="mb-4">
-              <label class="form-label fw-bold mb-2">
-                <i class="fa-solid fa-map-location text-danger me-1"></i> Step 3: Pickup Location
-              </label>
-              <div class="row g-3">
-                <div class="col-12">
-                  <label for="pickup_address" class="form-label small fw-semibold">Complete Street Address <span class="text-danger">*</span></label>
-                  <input type="text" class="form-control" id="pickup_address" name="pickup_address" value="{{ user.address or '' }}" placeholder="House/Flat No., Building Name, Street Name" required>
-                  <div class="invalid-feedback">Pickup address is required.</div>
-                </div>
-
-                <div class="col-md-6">
-                  <label for="city" class="form-label small fw-semibold">City <span class="text-danger">*</span></label>
-                  <input type="text" class="form-control" id="city" name="city" value="{{ user.city or 'Bengaluru' }}" required>
-                  <div class="invalid-feedback">City is required.</div>
-                </div>
-
-                <div class="col-md-6">
-                  <label for="pincode" class="form-label small fw-semibold">PIN Code <span class="text-danger">*</span></label>
-                  <input type="text" class="form-control" id="pincode" name="pincode" value="{{ user.pincode or '' }}" placeholder="560001" required>
-                  <div class="invalid-feedback">PIN code is required.</div>
-                </div>
-
-                <div class="col-12">
-                  <label for="notes" class="form-label small fw-semibold">Special Instructions / Fragile Items Note</label>
-                  <textarea class="form-control" id="notes" name="notes" rows="2" placeholder="e.g. Broken CRT glass taped, gate entry code, please ring bell..."></textarea>
-                </div>
-              </div>
-            </div>
-
-            <!-- Submit Button -->
-            <div class="d-flex justify-content-between align-items-center pt-3 border-top">
-              <a href="{{ url_for('user_dashboard') }}" class="btn btn-outline-secondary">
-                <i class="fa-solid fa-arrow-left me-1"></i> Back
-              </a>
-              <button type="submit" id="btnSubmitRequest" class="btn btn-success px-4 py-2 fw-bold" disabled>
-                <i class="fa-solid fa-check-to-slot me-2"></i> Submit Request & Generate Receipt
-              </button>
-            </div>
-          </form>
-        {% else %}
-          <div class="text-center py-5">
-            <div class="p-3 bg-light rounded-circle d-inline-block text-muted mb-3">
-              <i class="fa-solid fa-boxes-packing fs-1"></i>
-            </div>
-            <h5 class="fw-bold">No Available Items to Request</h5>
-            <p class="text-muted small max-w-500 mx-auto" style="max-width: 480px;">
-              You do not currently have any unassigned e-waste items in your inventory. Please register the electronic items you wish to dispose of first.
-            </p>
-            <a href="{{ url_for('register_ewaste') }}" class="btn btn-success">
-              <i class="fa-solid fa-plus-circle me-1"></i> Register E-Waste Item Now
-            </a>
           </div>
+
+          <!-- Step 2: Collection Preference & Date -->
+          <div class="mb-4">
+            <label class="form-label fw-bold mb-2">
+              <i class="fa-solid fa-calendar-day text-primary me-1"></i> Step 2: Schedule & Preference
+            </label>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="preference_type" class="form-label small fw-semibold">Collection Preference</label>
+                <select class="form-select" id="preference_type" name="preference_type" required>
+                  <option value="Doorstep Pickup" selected>Doorstep Pickup (Simulated Van Dispatch)</option>
+                  <option value="Centre Drop-Off">Drop-off at Authorized Recycling Centre</option>
+                </select>
+              </div>
+
+              <div class="col-md-6">
+                <label for="preferred_date" class="form-label small fw-semibold">Preferred Collection Date <span
+                    class="text-danger">*</span></label>
+                <input type="date" class="form-control" id="preferred_date" name="preferred_date" required>
+                <div class="invalid-feedback">Please choose a valid collection date.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 3: Address Details -->
+          <div class="mb-4">
+            <label class="form-label fw-bold mb-2">
+              <i class="fa-solid fa-map-location text-danger me-1"></i> Step 3: Pickup Location
+            </label>
+            <div class="row g-3">
+              <div class="col-12">
+                <label for="pickup_address" class="form-label small fw-semibold">Complete Street Address <span
+                    class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="pickup_address" name="pickup_address"
+                  value="{{ user.address or '' }}" placeholder="House/Flat No., Building Name, Street Name" required>
+                <div class="invalid-feedback">Pickup address is required.</div>
+              </div>
+
+              <div class="col-md-6">
+                <label for="city" class="form-label small fw-semibold">City <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="city" name="city" value="{{ user.city or 'Bengaluru' }}"
+                  required>
+                <div class="invalid-feedback">City is required.</div>
+              </div>
+
+              <div class="col-md-6">
+                <label for="pincode" class="form-label small fw-semibold">PIN Code <span
+                    class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="pincode" name="pincode" value="{{ user.pincode or '' }}"
+                  placeholder="560001" required>
+                <div class="invalid-feedback">PIN code is required.</div>
+              </div>
+
+              <div class="col-12">
+                <label for="notes" class="form-label small fw-semibold">Special Instructions / Fragile Items
+                  Note</label>
+                <textarea class="form-control" id="notes" name="notes" rows="2"
+                  placeholder="e.g. Broken CRT glass taped, gate entry code, please ring bell..."></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+            <a href="{{ url_for('user_dashboard') }}" class="btn btn-outline-secondary">
+              <i class="fa-solid fa-arrow-left me-1"></i> Back
+            </a>
+            <button type="submit" id="btnSubmitRequest" class="btn btn-success px-4 py-2 fw-bold" disabled>
+              <i class="fa-solid fa-check-to-slot me-2"></i> Submit Request & Generate Receipt
+            </button>
+          </div>
+        </form>
+        {% else %}
+        <div class="text-center py-5">
+          <div class="p-3 bg-light rounded-circle d-inline-block text-muted mb-3">
+            <i class="fa-solid fa-boxes-packing fs-1"></i>
+          </div>
+          <h5 class="fw-bold">No Available Items to Request</h5>
+          <p class="text-muted small max-w-500 mx-auto" style="max-width: 480px;">
+            You do not currently have any unassigned e-waste items in your inventory. Please register the electronic
+            items you wish to dispose of first.
+          </p>
+          <a href="{{ url_for('register_ewaste') }}" class="btn btn-success">
+            <i class="fa-solid fa-plus-circle me-1"></i> Register E-Waste Item Now
+          </a>
+        </div>
         {% endif %}
       </div>
     </div>
@@ -158,7 +173,7 @@
 {% block extra_scripts %}
 <script>
   // Set minimum date to today
-  document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('DOMContentLoaded', function () {
     const dateInput = document.getElementById('preferred_date');
     if (dateInput) {
       const today = new Date().toISOString().split('T')[0];
@@ -168,4 +183,3 @@
   });
 </script>
 {% endblock %}
-

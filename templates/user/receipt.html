@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Official Receipt - {{ req.request_code }}{% endblock %}
+{% block title %}Disposal Manifest - {{ req.request_code }} - EcoCycle{% endblock %}
 
 {% block content %}
 <div class="container py-4">
@@ -21,18 +21,18 @@
 
   <!-- Formal Manifest Receipt Container -->
   <div class="receipt-wrapper position-relative bg-white">
-    <!-- Academic Watermark -->
-    <div class="receipt-watermark">ACADEMIC PROTOTYPE</div>
+    <!-- Verification Watermark -->
+    <div class="receipt-watermark">ECOCYCLE MANIFEST</div>
 
     <!-- Receipt Header -->
     <div class="d-flex justify-content-between align-items-start border-bottom pb-3 mb-4">
       <div>
         <div class="d-flex align-items-center gap-2 mb-1">
           <i class="fa-solid fa-recycle text-success fs-3"></i>
-          <h4 class="fw-bold text-dark mb-0">E-Waste Management System</h4>
+          <h4 class="fw-bold text-dark mb-0">Eco<span class="text-success">Cycle</span></h4>
         </div>
-        <p class="text-muted small mb-0">Digital Collection Drive & Environmental Science Academic Initiative</p>
-        <span class="badge bg-secondary-subtle text-secondary border mt-1">Course: BCSP508 - CSE</span>
+        <p class="text-muted small mb-0">Responsible E-Waste Management &amp; Channelization Platform</p>
+        <span class="badge bg-light text-secondary border mt-1">EPR Compliance ID: EC-EPR-2026-KA</span>
       </div>
       <div class="text-end">
         <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 fw-bold mb-1">
@@ -74,26 +74,26 @@
         </thead>
         <tbody class="small">
           {% for item in req.items %}
-            <tr>
-              <td class="text-center">{{ loop.index }}</td>
-              <td>
-                <div class="fw-bold">{{ item.item_name }}</div>
-                {% if item.description %}
-                  <div class="text-muted" style="font-size: 0.8rem;">{{ item.description }}</div>
-                {% endif %}
-              </td>
-              <td>{{ item.category }}</td>
-              <td>
-                {% if item.item_condition == 'Working' %}
-                  <span class="badge bg-success-subtle text-success">Working</span>
-                {% elif item.item_condition == 'Damaged' %}
-                  <span class="badge bg-warning-subtle text-warning">Damaged</span>
-                {% else %}
-                  <span class="badge bg-danger-subtle text-danger">Not Working</span>
-                {% endif %}
-              </td>
-              <td class="text-center fw-bold">{{ item.quantity }}</td>
-            </tr>
+          <tr>
+            <td class="text-center">{{ loop.index }}</td>
+            <td>
+              <div class="fw-bold">{{ item.item_name }}</div>
+              {% if item.description %}
+              <div class="text-muted" style="font-size: 0.8rem;">{{ item.description }}</div>
+              {% endif %}
+            </td>
+            <td>{{ item.category }}</td>
+            <td>
+              {% if item.item_condition == 'Working' %}
+              <span class="badge bg-success-subtle text-success">Working</span>
+              {% elif item.item_condition == 'Damaged' %}
+              <span class="badge bg-warning-subtle text-warning">Damaged</span>
+              {% else %}
+              <span class="badge bg-danger-subtle text-danger">Not Working</span>
+              {% endif %}
+            </td>
+            <td class="text-center fw-bold">{{ item.quantity }}</td>
+          </tr>
           {% endfor %}
         </tbody>
         <tfoot class="table-light small">
@@ -111,44 +111,47 @@
         <div>
           <span class="text-muted me-2">Verification Status:</span>
           {% if req.status == 'Pending' %}
-            <span class="badge-status badge-status-pending">Pending Review</span>
+          <span class="badge-status badge-status-pending">Pending Review</span>
           {% elif req.status == 'Approved' %}
-            <span class="badge-status badge-status-approved">Approved & Scheduled</span>
+          <span class="badge-status badge-status-approved">Approved &amp; Scheduled</span>
           {% elif req.status == 'In Progress' %}
-            <span class="badge-status badge-status-in-progress">In Progress</span>
+          <span class="badge-status badge-status-in-progress">In Progress</span>
           {% elif req.status == 'Completed' %}
-            <span class="badge-status badge-status-completed">Recycled / Completed</span>
+          <span class="badge-status badge-status-completed">Recycled / Completed</span>
           {% else %}
-            <span class="badge-status badge-status-rejected">Rejected</span>
+          <span class="badge-status badge-status-rejected">Rejected</span>
           {% endif %}
         </div>
         <div class="text-muted">
-          Updated: {{ req.updated_at.strftime('%Y-%m-%d %H:%M') if req.updated_at else req.created_at.strftime('%Y-%m-%d %H:%M') }}
+          Updated: {{ req.updated_at.strftime('%Y-%m-%d %H:%M') if req.updated_at else req.created_at.strftime('%Y-%m-%d
+          %H:%M') }}
         </div>
       </div>
       {% if req.admin_notes %}
-        <div class="mt-2 text-secondary">
-          <strong>Admin Remarks:</strong> {{ req.admin_notes }}
-        </div>
+      <div class="mt-2 text-secondary">
+        <strong>Logistics Remarks:</strong> {{ req.admin_notes }}
+      </div>
       {% endif %}
     </div>
 
-    <!-- Legal & Academic Notice Footer -->
+    <!-- Legal & Statutory Notice Footer -->
     <div class="border-top pt-3 text-muted small" style="font-size: 0.78rem;">
       <div class="row align-items-center">
         <div class="col-8">
           <p class="mb-1">
-            <strong>Statutory Compliance:</strong> In alignment with India's <em>E-Waste (Management) Rules, 2022</em> and Extended Producer Responsibility (EPR) mandates issued by CPCB & KSPCB.
+            <strong>Statutory Compliance:</strong> In strict alignment with India's <em>E-Waste (Management) Rules,
+              2022</em> and Extended Producer Responsibility (EPR) mandates issued by CPCB &amp; KSPCB.
           </p>
           <p class="mb-0 text-secondary">
-            * Disclaimer: This digital receipt is generated as an academic software project demonstration. No physical scrap transaction or monetary value is represented.
+            * Authorized Channelization: This electronic disposal manifest acknowledges the scheduled
+            collection/handover of listed equipment for scientific material recovery at statutory authorized recycling
+            facilities.
           </p>
         </div>
         <div class="col-4 text-end">
           <div class="p-2 border rounded d-inline-block text-center bg-light">
             <i class="fa-solid fa-stamp text-success fs-3"></i>
             <div class="fw-bold text-success" style="font-size: 0.65rem;">DIGITALLY VERIFIED</div>
-            <div class="font-monospace text-muted" style="font-size: 0.6rem;">{{ req.request_code[:12] }}</div>
           </div>
         </div>
       </div>
@@ -156,4 +159,3 @@
   </div>
 </div>
 {% endblock %}
-

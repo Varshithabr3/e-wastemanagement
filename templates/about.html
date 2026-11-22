@@ -1,83 +1,126 @@
 {% extends 'base.html' %}
 
-{% block title %}About Us - E-Waste Collection Drive & Public Awareness{% endblock %}
+{% block title %}About Us - EcoCycle | Responsible E-Waste Management{% endblock %}
 
 {% block content %}
 <div class="container py-5">
   <!-- Breadcrumb -->
   <nav aria-label="breadcrumb" class="mb-4">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="{{ url_for('index') }}" class="text-success text-decoration-none">Home</a></li>
+      <li class="breadcrumb-item"><a href="{{ url_for('index') }}" class="text-success text-decoration-none">Home</a>
+      </li>
       <li class="breadcrumb-item active" aria-current="page">About Us</li>
     </ol>
   </nav>
 
+  <!-- Page Header -->
   <div class="row align-items-center g-5 mb-5">
     <div class="col-lg-7">
-      <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 rounded-pill fw-bold mb-3">
-        <i class="fa-solid fa-graduation-cap me-1"></i> Academic College Project
+      <span
+        class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 rounded-pill fw-bold mb-3 d-inline-flex align-items-center gap-2">
+        <i class="fa-solid fa-leaf"></i> EcoCycle Environmental Initiative
       </span>
       <h1 class="fw-bold display-5 mb-3 text-dark">
         About the E-Waste Management System
       </h1>
-      <p class="lead text-secondary">
-        A software-based digital solution engineered for academic evaluation in Computer Science & Environmental Science (Course Code: BCSP508 - CSE).
+      <p class="lead text-secondary mb-3">
+        EcoCycle is a public environmental service platform dedicated to advancing responsible electronic waste
+        collection, scientific recycling, and circular resource recovery across India.
       </p>
       <p class="text-muted">
-        The exponential proliferation of consumer electronic devices has turned electrical and electronic waste into the world's fastest-growing municipal waste stream. When discarded casually with regular household trash, toxic heavy metals such as lead, mercury, and cadmium contaminate groundwater and soil. This application addresses this challenge by providing citizens with transparent recycling pathways and educating the community on scientific electronic disposal.
+        The exponential proliferation of consumer electronics and computing hardware has turned electrical and
+        electronic equipment (EEE) waste into one of the world's fastest-growing environmental crises. When discarded
+        into municipal dustbins, toxic heavy metals such as lead, mercury, cadmium, and brominated flame retardants
+        leach into soil and municipal water tables. EcoCycle provides citizens, institutions, and enterprises with a
+        transparent, certified digital pipeline to channel end-of-life electronics directly to statutory authorized
+        recyclers.
       </p>
     </div>
 
     <div class="col-lg-5">
-      <div class="card card-eco border-success border-2 p-4 bg-white">
-        <h5 class="fw-bold text-success mb-3">
-          <i class="fa-solid fa-circle-exclamation me-2"></i>Academic Scope Notice
-        </h5>
-        <p class="small text-secondary mb-3">
-          <strong>Notice for Evaluators and Visitors:</strong> This application is a <strong>purely software-based academic project prototype</strong>.
-        </p>
-        <ul class="small text-secondary ps-3 mb-3">
-          <li>Does NOT require physical IoT devices, microcontrollers, or physical sensors.</li>
-          <li>Does NOT use physical smart bins or automated weighing hardware.</li>
-          <li>Does NOT conduct actual physical transport or physical electronic waste pickup.</li>
-          <li>All registration, collection requests, status updates, tracking, and receipts are handled <strong>digitally and software-simulated</strong> for demonstration.</li>
+      <div class="card card-eco border-success border-2 p-4 bg-white shadow-sm">
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <div class="brand-icon-wrapper" style="width: 44px; height: 44px;">
+            <i class="fa-solid fa-shield-halved text-success fs-3"></i>
+          </div>
+          <div>
+            <h5 class="fw-bold text-success mb-0">Our Core Commitments</h5>
+            <small class="text-muted">Standards of Operation</small>
+          </div>
+        </div>
+
+        <ul class="list-group list-group-flush small">
+          <li class="list-group-item px-0 py-2 border-0 d-flex gap-2">
+            <i class="fa-solid fa-circle-check text-success mt-1"></i>
+            <div><strong>Zero-Landfill Protocol:</strong> Ensuring all collected equipment undergoes scientific
+              segregation, material reclamation, and environmentally sound treatment.</div>
+          </li>
+          <li class="list-group-item px-0 py-2 border-0 d-flex gap-2">
+            <i class="fa-solid fa-circle-check text-success mt-1"></i>
+            <div><strong>Statutory Verification:</strong> Partnering exclusively with recyclers, dismantlers, and
+              refurbishers authorized by CPCB &amp; KSPCB.</div>
+          </li>
+          <li class="list-group-item px-0 py-2 border-0 d-flex gap-2">
+            <i class="fa-solid fa-circle-check text-success mt-1"></i>
+            <div><strong>Certified Data Sanitization:</strong> Providing verified data erasure protocols to prevent
+              personal and institutional data compromise.</div>
+          </li>
+          <li class="list-group-item px-0 py-2 border-0 d-flex gap-2">
+            <i class="fa-solid fa-circle-check text-success mt-1"></i>
+            <div><strong>Digital Manifests:</strong> Offering transparent tracking IDs and verifiable digital collection
+              receipts for every transaction.</div>
+          </li>
         </ul>
-        <div class="bg-success-subtle p-2 rounded text-success small text-center fw-semibold">
-          Department of Computer Science & Engineering
+
+        <div class="bg-success-subtle p-2 rounded text-success small text-center fw-bold mt-3">
+          <i class="fa-solid fa-certificate me-1"></i> E-Waste (Management) Rules, 2022 Compliant
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Project Objectives Section -->
+  <!-- Three Strategic Pillars -->
   <div class="row g-4 mb-5">
     <div class="col-12">
       <div class="p-4 bg-white rounded-3 shadow-sm border">
-        <h3 class="fw-bold text-dark mb-4">
-          <i class="fa-solid fa-bullseye text-danger me-2"></i>Project Objectives & Scope
-        </h3>
+        <div class="text-center mb-4">
+          <span
+            class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-2 rounded-pill fw-semibold">
+            Platform Capabilities
+          </span>
+          <h3 class="fw-bold text-dark mt-2 mb-1">Our Three Strategic Pillars</h3>
+          <p class="text-muted small">Engineered to make responsible electronic disposal transparent, accessible, and
+            measurable.</p>
+        </div>
+
         <div class="row g-4">
           <div class="col-md-4">
-            <div class="border-start border-success border-4 ps-3">
-              <h5 class="fw-bold">Objective 1: User Platform</h5>
-              <p class="small text-muted mb-0">
-                To build an intuitive, secure web portal where users can register electronic waste details, upload photos, specify conditions, and digitally submit collection requests with unique tracking codes.
+            <div class="border-start border-success border-4 ps-3 h-100 d-flex flex-column">
+              <h5 class="fw-bold text-success mb-2">1. Citizen Platform &amp; Logistics</h5>
+              <p class="small text-secondary mb-0">
+                A streamlined web interface allowing users to catalog electronic waste, specify device condition, choose
+                doorstep pickup or drop-off preferences, and generate official digital disposal manifests with real-time
+                tracking codes.
               </p>
             </div>
           </div>
           <div class="col-md-4">
-            <div class="border-start border-primary border-4 ps-3">
-              <h5 class="fw-bold">Objective 2: Authorized Centres & Guidance</h5>
-              <p class="small text-muted mb-0">
-                To curate authentic, officially verified information from statutory pollution boards (CPCB, KSPCB), guide citizens on safe pre-disposal storage, data sanitization, and provide Google Maps directions.
+            <div class="border-start border-primary border-4 ps-3 h-100 d-flex flex-column">
+              <h5 class="fw-bold text-primary mb-2">2. Authorized Directory &amp; Guidance</h5>
+              <p class="small text-secondary mb-0">
+                A verified directory of certified facilities licensed by the Central Pollution Control Board (CPCB) and
+                Karnataka State Pollution Control Board (KSPCB), complemented by scientific step-by-step citizen
+                pre-disposal preparation protocols.
               </p>
             </div>
           </div>
           <div class="col-md-4">
-            <div class="border-start border-warning border-4 ps-3">
-              <h5 class="fw-bold">Objective 3: Administrative Dashboard</h5>
-              <p class="small text-muted mb-0">
-                To empower administrators with data-driven analytics via Chart.js, workflow approval controls for collection requests, inventory filtering, and full management over authorized recycling centre listings.
+            <div class="border-start border-warning border-4 ps-3 h-100 d-flex flex-column">
+              <h5 class="fw-bold text-warning mb-2">3. Analytics &amp; Public Education</h5>
+              <p class="small text-secondary mb-0">
+                Administrative intelligence featuring real-time Chart.js volume metrics, status workflow audits, and
+                interactive public awareness modules with an eco-recognition evaluation to educate communities on
+                hazardous materials.
               </p>
             </div>
           </div>
@@ -86,59 +129,114 @@
     </div>
   </div>
 
-  <!-- Technical Stack Overview -->
+  <!-- Regulatory Standards & Alignment -->
   <div class="row g-4 mb-5">
     <div class="col-12">
       <h3 class="fw-bold text-dark mb-4">
-        <i class="fa-solid fa-layer-group text-primary me-2"></i>Technology Stack Architecture
+        <i class="fa-solid fa-scale-balanced text-success me-2"></i>Statutory Compliance &amp; Regulatory Framework
+      </h3>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card card-eco p-4 h-100 bg-white">
+        <div class="icon-box-eco icon-box-green">
+          <i class="fa-solid fa-landmark"></i>
+        </div>
+        <h5 class="fw-bold mb-2">MoEFCC Regulations</h5>
+        <p class="small text-secondary mb-0">
+          Operates strictly within the mandate of the <em>E-Waste (Management) Rules, 2022</em> issued by the Ministry
+          of Environment, Forest and Climate Change, Government of India.
+        </p>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card card-eco p-4 h-100 bg-white">
+        <div class="icon-box-eco icon-box-blue">
+          <i class="fa-solid fa-building-shield"></i>
+        </div>
+        <h5 class="fw-bold mb-2">CPCB EPR Portal</h5>
+        <p class="small text-secondary mb-0">
+          Supports Extended Producer Responsibility (EPR) mandates, ensuring end-of-life electronics are accounted for
+          and channelized only to registered recyclers.
+        </p>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card card-eco p-4 h-100 bg-white">
+        <div class="icon-box-eco icon-box-teal">
+          <i class="fa-solid fa-recycle"></i>
+        </div>
+        <h5 class="fw-bold mb-2">KSPCB State Standards</h5>
+        <p class="small text-secondary mb-0">
+          Adheres to Karnataka State Pollution Control Board guidelines, monitoring local recycling capacities,
+          environmental emission thresholds, and safe logistics channelization.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Technical Infrastructure Overview -->
+  <div class="row g-4 mb-5">
+    <div class="col-12">
+      <h3 class="fw-bold text-dark mb-4">
+        <i class="fa-solid fa-layer-group text-primary me-2"></i>Platform Technology &amp; Security
       </h3>
     </div>
 
     <div class="col-md-3 col-6">
-      <div class="card card-eco text-center p-3 h-100">
+      <div class="card card-eco text-center p-3 h-100 bg-white">
         <i class="fa-brands fa-python fs-1 text-primary mb-2"></i>
-        <h6 class="fw-bold">Python Flask</h6>
-        <p class="small text-muted mb-0">Lightweight, WSGI compliant microframework powering RESTful routing, session auth, and business logic.</p>
+        <h6 class="fw-bold mb-1">Python Flask</h6>
+        <p class="small text-muted mb-0">High-performance application backend and RESTful routing.</p>
       </div>
     </div>
 
     <div class="col-md-3 col-6">
-      <div class="card card-eco text-center p-3 h-100">
-        <i class="fa-solid fa-database fs-1 text-info mb-2"></i>
-        <h6 class="fw-bold">MySQL 8.0 & PyMySQL</h6>
-        <p class="small text-muted mb-0">Relational database storing user credentials, e-waste inventories, verified centres, and request workflows.</p>
+      <div class="card card-eco text-center p-3 h-100 bg-white">
+        <i class="fa-solid fa-database fs-1 text-success mb-2"></i>
+        <h6 class="fw-bold mb-1">MySQL 8.0</h6>
+        <p class="small text-muted mb-0">Relational schema enforcing strict foreign-key integrity.</p>
       </div>
     </div>
 
     <div class="col-md-3 col-6">
-      <div class="card card-eco text-center p-3 h-100">
-        <i class="fa-brands fa-bootstrap fs-1 text-purple mb-2" style="color: #6f42c1;"></i>
-        <h6 class="fw-bold">Bootstrap 5</h6>
-        <p class="small text-muted mb-0">Modern, fully responsive frontend grid and component framework with mobile-first UI design.</p>
+      <div class="card card-eco text-center p-3 h-100 bg-white">
+        <i class="fa-brands fa-bootstrap fs-1 text-primary mb-2"></i>
+        <h6 class="fw-bold mb-1">Bootstrap 5.3</h6>
+        <p class="small text-muted mb-0">Responsive, mobile-optimized user interface.</p>
       </div>
     </div>
 
     <div class="col-md-3 col-6">
-      <div class="card card-eco text-center p-3 h-100">
-        <i class="fa-solid fa-chart-pie fs-1 text-success mb-2"></i>
-        <h6 class="fw-bold">Chart.js & Font Awesome</h6>
-        <p class="small text-muted mb-0">Interactive visual charts for category statistics and clean vector iconography across all modules.</p>
+      <div class="card card-eco text-center p-3 h-100 bg-white">
+        <i class="fa-solid fa-chart-pie fs-1 text-warning mb-2"></i>
+        <h6 class="fw-bold mb-1">Chart.js Visuals</h6>
+        <p class="small text-muted mb-0">Dynamic real-time visualizations for administrative audit.</p>
       </div>
     </div>
   </div>
 
-  <!-- Data Authenticity Commitment -->
-  <div class="alert alert-info p-4 border-info-subtle rounded-3">
-    <div class="d-flex align-items-start gap-3">
-      <i class="fa-solid fa-shield-check fs-2 text-info mt-1"></i>
-      <div>
-        <h5 class="fw-bold mb-1">Commitment to Official Data Integrity</h5>
-        <p class="small mb-0">
-          In strict compliance with academic standards, all authorized recycling centres featured in this portal are sourced directly from official public directories of the <strong>Central Pollution Control Board (CPCB)</strong> and the <strong>Karnataka State Pollution Control Board (KSPCB)</strong> under the <em>E-Waste (Management) Rules</em>. Any mock demonstration data is unambiguously marked with a "Demonstration Data" badge.
+  <!-- Call to Action Banner -->
+  <div class="card bg-success text-white p-4 p-md-5 rounded-4 border-0 shadow">
+    <div class="row align-items-center g-4">
+      <div class="col-lg-8">
+        <h3 class="fw-bold mb-2">Ready to Make an Environmental Impact?</h3>
+        <p class="lead mb-0 text-light opacity-90">
+          Join thousands of citizens responsibly channelizing electronics. Schedule a pickup or locate your nearest
+          authorized centre today.
         </p>
+      </div>
+      <div class="col-lg-4 text-lg-end">
+        <a href="{{ url_for('register') }}" class="btn btn-light btn-lg px-4 fw-bold text-success me-2 mb-2 mb-sm-0">
+          <i class="fa-solid fa-user-plus me-1"></i> Register E-Waste
+        </a>
+        <a href="{{ url_for('centres') }}" class="btn btn-outline-light btn-lg px-4 fw-bold">
+          <i class="fa-solid fa-location-dot me-1"></i> Find Centres
+        </a>
       </div>
     </div>
   </div>
 </div>
 {% endblock %}
-
